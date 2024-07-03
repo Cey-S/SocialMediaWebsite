@@ -12,7 +12,7 @@ namespace SocialMediaWebsite.Entities.Models
         public string TagName { get; set; }
 
         #region N-N Relationships
-        public List<Post>? Posts { get; set; } 
+        public List<Post>? Posts { get; set; } = new List<Post>();
         #endregion
     }
 }

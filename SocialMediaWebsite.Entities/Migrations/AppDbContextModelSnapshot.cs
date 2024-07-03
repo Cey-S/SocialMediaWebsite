@@ -31,7 +31,7 @@ namespace SocialMediaWebsite.Entities.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("PostTag");
+                    b.ToTable("PostTag", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaWebsite.Entities.Models.Comment", b =>
@@ -60,7 +60,7 @@ namespace SocialMediaWebsite.Entities.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaWebsite.Entities.Models.Interaction", b =>
@@ -90,7 +90,7 @@ namespace SocialMediaWebsite.Entities.Migrations
                     b.HasIndex("UserId", "PostId", "InteractionTypeId")
                         .IsUnique();
 
-                    b.ToTable("Interactions");
+                    b.ToTable("Interactions", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaWebsite.Entities.Models.InteractionType", b =>
@@ -112,7 +112,7 @@ namespace SocialMediaWebsite.Entities.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("InteractionTypes");
+                    b.ToTable("InteractionTypes", (string)null);
 
                     b.HasData(
                         new
@@ -153,7 +153,7 @@ namespace SocialMediaWebsite.Entities.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Photos");
+                    b.ToTable("Photos", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaWebsite.Entities.Models.Post", b =>
@@ -182,7 +182,7 @@ namespace SocialMediaWebsite.Entities.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaWebsite.Entities.Models.Tag", b =>
@@ -204,7 +204,7 @@ namespace SocialMediaWebsite.Entities.Migrations
                     b.HasIndex("TagName")
                         .IsUnique();
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaWebsite.Entities.Models.User", b =>
@@ -251,7 +251,7 @@ namespace SocialMediaWebsite.Entities.Migrations
                     b.HasIndex("UserName")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("UserUser", b =>
@@ -266,7 +266,7 @@ namespace SocialMediaWebsite.Entities.Migrations
 
                     b.HasIndex("FollowingId");
 
-                    b.ToTable("UserUser");
+                    b.ToTable("UserUser", (string)null);
                 });
 
             modelBuilder.Entity("PostTag", b =>

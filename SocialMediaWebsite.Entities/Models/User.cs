@@ -17,10 +17,10 @@ namespace SocialMediaWebsite.Entities.Models
         public string? ImagePath { get; set; } // Profile Picture
 
         #region 1-N Relationships
-        public List<Post>? Posts { get; set; }
-        public List<Interaction>? Interactions { get; set; }
-        public List<User>? Followers { get; set; }
-        public List<User>? Following { get; set; }
+        public List<Post>? Posts { get; set; } = new List<Post>();
+        public List<Interaction>? Interactions { get; set; } = new List<Interaction>();
+        public List<User>? Followers { get; set; } = new List<User>();
+        public List<User>? Following { get; set; } = new List<User>();
         #endregion
     }
 }

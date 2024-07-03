@@ -12,7 +12,7 @@ namespace SocialMediaWebsite.Entities.Models
         public string Name { get; set; } // e.g., like, share
 
         #region 1-N Relationships
-        public List<Interaction>? Interactions { get; set; } 
+        public List<Interaction>? Interactions { get; set; } = new List<Interaction>();
         #endregion
     }
 }

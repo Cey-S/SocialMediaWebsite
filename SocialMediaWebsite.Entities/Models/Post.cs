@@ -16,13 +16,13 @@ namespace SocialMediaWebsite.Entities.Models
         public int UserId { get; set; }
         public User Owner { get; set; } // Post Owner
 
-        public List<Photo>? Photos { get; set; }
-        public List<Interaction>? Interactions { get; set; }
-        public List<Comment>? Comments { get; set; }
+        public List<Photo>? Photos { get; set; } = new List<Photo>();
+        public List<Interaction>? Interactions { get; set; } = new List<Interaction>();
+        public List<Comment>? Comments { get; set; } = new List<Comment>();
         #endregion
 
         #region N-N Relationships
-        public List<Tag>? Tags { get; set; } 
+        public List<Tag>? Tags { get; set; } = new List<Tag>(); 
         #endregion
     }
 }
