@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaWebsite.Core", "SocialMediaWebsite.Core\SocialMediaWebsite.Core.csproj", "{9DB82915-F781-46FE-9651-B11A907D72CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMediaWebsite.Core", "SocialMediaWebsite.Core\SocialMediaWebsite.Core.csproj", "{9DB82915-F781-46FE-9651-B11A907D72CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaWebsite.Entities", "SocialMediaWebsite.Entities\SocialMediaWebsite.Entities.csproj", "{1D5F33CA-68ED-462B-8866-F43F04B191B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMediaWebsite.Entities", "SocialMediaWebsite.Entities\SocialMediaWebsite.Entities.csproj", "{1D5F33CA-68ED-462B-8866-F43F04B191B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaWebsite.MVC", "SocialMediaWebsite.MVC\SocialMediaWebsite.MVC.csproj", "{2BD3AC30-4A37-4EEE-BF48-DF3D32801112}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaWebsite.BLL", "SocialMediaWebsite.BLL\SocialMediaWebsite.BLL.csproj", "{8F74F2CA-56F7-446C-968F-66B745CFB03D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{1D5F33CA-68ED-462B-8866-F43F04B191B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D5F33CA-68ED-462B-8866-F43F04B191B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D5F33CA-68ED-462B-8866-F43F04B191B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BD3AC30-4A37-4EEE-BF48-DF3D32801112}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BD3AC30-4A37-4EEE-BF48-DF3D32801112}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BD3AC30-4A37-4EEE-BF48-DF3D32801112}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BD3AC30-4A37-4EEE-BF48-DF3D32801112}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F74F2CA-56F7-446C-968F-66B745CFB03D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F74F2CA-56F7-446C-968F-66B745CFB03D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F74F2CA-56F7-446C-968F-66B745CFB03D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F74F2CA-56F7-446C-968F-66B745CFB03D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
