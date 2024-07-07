@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using SocialMediaWebsite.BLL.Abstract;
+using SocialMediaWebsite.BLL.Concrete;
 using SocialMediaWebsite.Core.BusinessLogic;
 using SocialMediaWebsite.Entities.DbContexts;
 
@@ -16,6 +18,7 @@ namespace SocialMediaWebsite.MVC
             builder.Services.AddDbContext<AppDbContext>(p => p.UseMySQL(builder.Configuration.GetConnectionString("SocialMediaWebsite")));
 
             builder.Services.AddScoped(typeof(IManager<,>), typeof(Manager<,>));
+            builder.Services.AddScoped<IPostManager, PostManager>();
 
             var app = builder.Build();
 
@@ -36,7 +39,7 @@ namespace SocialMediaWebsite.MVC
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Feed}/{action=Index}/{id?}");
 
             app.Run();
         }

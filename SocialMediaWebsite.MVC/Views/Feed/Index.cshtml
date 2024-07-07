@@ -1,0 +1,93 @@
+﻿@* @model List<Post>
+
+
+@foreach (var post in Model)
+{
+	<div class="card mb-5" style="max-width: 800px;">
+		<div class="card-header">
+			<div class="d-flex align-items-center">
+				<img src="~/img/logo/hashtag_128.png" style="height: 32px; width: 32px;"/>
+				<h6 class="card-subtitle ms-2">@post.Owner.UserName</h6>
+			</div>
+		</div>
+		<div class="card-body">
+			<h5 class="card-title">@post.Title</h5>
+			<p class="card-text">@post.Body</p>
+		</div>
+		<div class="card-footer">
+			@foreach (var tag in post.Tags)
+			{
+				<a href="#">#@tag.TagName</a>
+			}
+		</div>
+	</div>
+} *@
+
+<div id="container"></div>
+<div id="progress" style="display:none">
+	<h4>Loading...</h4>
+</div>
+
+@section Scripts {
+	<script type="text/javascript">
+
+		var pageSize = 3;
+		var pageIndex = 0;
+
+		$(document).ready(function () {
+			GetData();
+
+			$(window).scroll(function () {
+				if ($(window).scrollTop() ==
+					$(document).height() - $(window).height()) {
+					GetData();
+				}
+			});
+		});
+
+		function GetData() {
+			$.ajax({
+				type: 'GET',
+				url: '/Feed/GetData',
+				data: { "pageindex": pageIndex, "pagesize": pageSize },
+				dataType: 'json',
+				success: function (data) {
+					if (data != null) {
+						var jsonObject = $.parseJSON(data);
+						console.log(jsonObject);
+						$.each(jsonObject, function (index, post) {
+							$("#container").append(
+								'<div class="card mb-5" style="max-width: 800px; ">' +
+								'<div class="card-header">' +
+								'<div class="d-flex align-items-center">' +
+								'<img src="~/img/logo/hashtag_128.png" style="height: 32px; width: 32px;"/>' +
+								'<h6 class="card-subtitle ms-2">' + post.Username + '</h6>' +
+								'</div>' +
+								'</div>' +
+								'<div class="card-body">' +
+								'<h5 class="card-title">' + post.Title + '</h5>' +
+								'<p class="card-text">' + post.Body + '</p>' +
+								'</div>' +
+								'<div class="card-footer" id="'+post.PostId+'tags"></div>' +
+								'</div>');
+							var footerId = "#" + post.PostId + "tags";
+							$.each(post.PostTags, function (j, tag) { $(footerId).append('<a href="#">#' + tag + '</a>'); });
+
+
+						});
+						pageIndex++;
+					}
+				},
+				beforeSend: function () {
+					$("#progress").show();
+				},
+				complete: function () {
+					$("#progress").hide();
+				},
+				error: function () {
+					alert("Error while retrieving data!");
+				}
+			});
+		}
+	</script>
+}
