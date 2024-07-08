@@ -67,3 +67,12 @@ button.accept-policy {
     white-space: nowrap;
     line-height: 60px;
 }
+
+#btn-add-tag {
+    background-color: gainsboro;
+    color: dimgray;
+}
+
+#btn-add-tag:hover{
+    color: black;
+}

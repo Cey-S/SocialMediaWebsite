@@ -1,0 +1,52 @@
+﻿@model PostCreateVM
+
+@* <div class="card mb-5" style="max-width: 800px;">
+	<div class="card-header">
+		<div class="d-flex align-items-center">
+			<img src="~/img/logo/hashtag_128.png" style="height: 32px; width: 32px;" />
+			<h6 class="card-subtitle ms-2">@post.Owner.UserName</h6>
+		</div>
+	</div>
+	<div class="card-body">
+		<h5 class="card-title">@post.Title</h5>
+		<p class="card-text">@post.Body</p>
+	</div>
+	<div class="card-footer">
+		@foreach (var tag in post.Tags)
+		{
+			<a href="#">#@tag.TagName</a>
+		}
+	</div>
+</div> *@
+
+<form class="d-flex justify-content-center" asp-action="Create" method="post">
+	<div class="d-flex flex-column w-100" style="max-width: 800px;">
+		<div class="card">
+			<div class="card-header">
+				<div class="d-flex align-items-center">
+					<img src=@Model.ProfilePicture style="height: 32px; width: 32px;" />
+					<input type="hidden" asp-for="ProfilePicture" />
+					<h6 class="card-subtitle ms-2">@Model.Username</h6>
+					<input type="hidden" asp-for="Username" />
+				</div>
+			</div>
+			<div class="card-body">
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<div class="card-title">
+					<input class="w-100 fs-5 border-0" asp-for="Title" placeholder="Write the Title of your post here..." contenteditable="true" />
+					<span asp-validation-for="Title" class="text-danger"></span>
+				</div>
+				<div class="card-text">
+					<textarea class="w-100 border-0" asp-for="Body" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' placeholder="Go ahead and share your thoughts here..." contenteditable="true"></textarea>
+					<span asp-validation-for="Body" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="card-footer">
+				<div id="selected-tags"></div>
+				<button id="btn-add-tag" class="rounded-pill border-0 bg-gradient" onclick="">#add tags to help people find your posts</button>
+			</div>
+		</div>
+		<button type="submit" class="btn btn-secondary mt-3 align-self-end">Create Post</button>
+	</div>
+</form>
+
