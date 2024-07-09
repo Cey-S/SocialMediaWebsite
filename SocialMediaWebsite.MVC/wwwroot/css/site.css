@@ -76,3 +76,12 @@ button.accept-policy {
 #btn-add-tag:hover{
     color: black;
 }
+
+.post-tag {
+    background-color: lightgray;
+    color: black;
+    font-weight: 600;
+    padding: 0 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}

@@ -1,5 +1,4 @@
 ﻿@model PostCreateVM
-
 @* <div class="card mb-5" style="max-width: 800px;">
 	<div class="card-header">
 		<div class="d-flex align-items-center">
@@ -41,12 +40,66 @@
 					<span asp-validation-for="Body" class="text-danger"></span>
 				</div>
 			</div>
-			<div class="card-footer">
-				<div id="selected-tags"></div>
-				<button id="btn-add-tag" class="rounded-pill border-0 bg-gradient" onclick="">#add tags to help people find your posts</button>
+			<div id="selected-tags" class="card-footer d-flex flex-wrap">
+				@* <div id="selected-tags" class="d-flex flex-wrap">
+
+				</div> *@
+				@* <input id="btn-add-tag" class="rounded-pill border-0 bg-gradient mb-2 ps-2 pe-2" type="text" placeholder="#add tags to help people find your posts" /> *@
+				<button type="button" id="btn-add-tag" class="rounded-pill border-0 bg-gradient mb-2">
+					<span id="tag-write-area" class="ps-2 pe-2" onmousedown="FocusToTagArea(this)" onblur="FocusOutFromTagArea(this)">#add tags to help people find your posts</span>
+				</button>
 			</div>
 		</div>
 		<button type="submit" class="btn btn-secondary mt-3 align-self-end">Create Post</button>
 	</div>
 </form>
+
+@section Scripts {
+	<script type="text/javascript">
+		var addTagButton;
+		var tagWriteArea;
+		var selectedTags;
+
+		$(document).ready(function () {
+			selectedTags = document.getElementById("selected-tags");
+			tagWriteArea = document.getElementById("tag-write-area");
+			addTagButton = document.getElementById("btn-add-tag");
+
+			tagWriteArea.addEventListener("keypress", function (event) {
+				if (event.key === "Enter") {
+					event.preventDefault();
+					AddTag(tagWriteArea.innerHTML);
+				}
+			});
+		});
+
+		function AddTag(tagName) {
+			const node = document.createElement("span");
+			const textnode = document.createTextNode("#" + tagName);
+			node.classList.add("post-tag");
+			node.classList.add("rounded-pill");
+			node.appendChild(textnode);
+			selectedTags.insertBefore(node, addTagButton);
+
+			tagWriteArea.innerHTML = "";
+		}
+
+		function FocusToTagArea(element) {
+			if (document.activeElement === element) return;
+			element.innerHTML = "";
+			element.setAttribute("contenteditable", true);
+			element.focus();
+		}
+
+		function FocusOutFromTagArea(element) {
+			if (document.getElementById("selected-tags").childElementCount > 1) {
+				element.innerHTML = "#add another tag";
+			}
+			else {
+				element.innerHTML = "#add tags to help people find your posts";
+			}
+			element.setAttribute("contenteditable", false);
+		}
+	</script>
+}
 
