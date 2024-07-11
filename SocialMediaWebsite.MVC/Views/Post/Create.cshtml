@@ -1,49 +1,31 @@
 ﻿@model PostCreateVM
-@* <div class="card mb-5" style="max-width: 800px;">
-	<div class="card-header">
-		<div class="d-flex align-items-center">
-			<img src="~/img/logo/hashtag_128.png" style="height: 32px; width: 32px;" />
-			<h6 class="card-subtitle ms-2">@post.Owner.UserName</h6>
-		</div>
-	</div>
-	<div class="card-body">
-		<h5 class="card-title">@post.Title</h5>
-		<p class="card-text">@post.Body</p>
-	</div>
-	<div class="card-footer">
-		@foreach (var tag in post.Tags)
-		{
-			<a href="#">#@tag.TagName</a>
-		}
-	</div>
-</div> *@
 
 <form class="d-flex justify-content-center" asp-action="Create" method="post">
 	<div class="d-flex flex-column w-100" style="max-width: 800px;">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 		<div class="card">
+			<!--Card Header-->
 			<div class="card-header">
 				<div class="d-flex align-items-center">
 					<img src=@Model.ProfilePicture style="height: 32px; width: 32px;" />
-					<input type="hidden" asp-for="ProfilePicture" />
+					<input type="hidden" asp-for="@Model.ProfilePicture" />
 					<h6 class="card-subtitle ms-2">@Model.Username</h6>
-					<input type="hidden" asp-for="Username" />
+					<input type="hidden" asp-for="@Model.Username" />
 				</div>
 			</div>
+			<!--Card Body-->
 			<div class="card-body">
-				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 				<div class="card-title">
-					<input class="w-100 fs-5 border-0" asp-for="Title" placeholder="Write the Title of your post here..." contenteditable="true" />
-					<span asp-validation-for="Title" class="text-danger"></span>
+					<input class="w-100 fs-5 border-0" asp-for="@Model.Title" placeholder="Write the Title of your post here..." contenteditable="true" />
+					<span asp-validation-for="@Model.Title" class="text-danger"></span>
 				</div>
 				<div class="card-text">
-					<textarea class="w-100 border-0" asp-for="Body" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' placeholder="Go ahead and share your thoughts here..." contenteditable="true"></textarea>
-					<span asp-validation-for="Body" class="text-danger"></span>
+					<textarea class="w-100 border-0" asp-for="@Model.Body" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' placeholder="Go ahead and share your thoughts here..." contenteditable="true"></textarea>
+					<span asp-validation-for="@Model.Body" class="text-danger"></span>
 				</div>
 			</div>
+			<!--Card Footer-->
 			<div id="selected-tags" class="card-footer d-flex flex-wrap">
-				@* <div id="selected-tags" class="d-flex flex-wrap">
-
-				</div> *@
 				@* <input id="btn-add-tag" class="rounded-pill border-0 bg-gradient mb-2 ps-2 pe-2" type="text" placeholder="#add tags to help people find your posts" /> *@
 				<button type="button" id="btn-add-tag" class="rounded-pill border-0 bg-gradient mb-2">
 					<span id="tag-write-area" class="ps-2 pe-2" onmousedown="FocusToTagArea(this)" onblur="FocusOutFromTagArea(this)">#add tags to help people find your posts</span>
@@ -60,6 +42,9 @@
 		var tagWriteArea;
 		var selectedTags;
 
+		var tagCount;
+		var tagDeletedIndex;
+
 		$(document).ready(function () {
 			selectedTags = document.getElementById("selected-tags");
 			tagWriteArea = document.getElementById("tag-write-area");
@@ -71,6 +56,9 @@
 					AddTag(tagWriteArea.innerHTML);
 				}
 			});
+
+			tagCount = 0;
+			tagDeletedIndex = -1;
 		});
 
 		function AddTag(tagName) {
@@ -80,6 +68,11 @@
 			node.classList.add("rounded-pill");
 			node.appendChild(textnode);
 			selectedTags.insertBefore(node, addTagButton);
+
+			var tagAspForHtml = '';
+			tagAspForHtml += '<input type="hidden" name="TagNames[' + tagCount + ']" value="' + tagName + '" />'
+			$("#selected-tags").append(tagAspForHtml);
+			tagCount++;
 
 			tagWriteArea.innerHTML = "";
 		}

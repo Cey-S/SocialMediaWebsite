@@ -16,6 +16,6 @@ namespace SocialMediaWebsite.MVC.Models
 		[Required(AllowEmptyStrings = false, ErrorMessage = "The body text can't be empty")]
 		public string Body { get; set; }
 
-        public List<string> TagNames { get; set; }
+		public List<string> TagNames { get; set; } = new List<string>();
     }
 }
