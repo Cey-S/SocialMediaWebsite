@@ -13,13 +13,24 @@ namespace SocialMediaWebsite.BLL.Concrete
 {
 	public class PostManager : Manager<AppDbContext, Post>, IPostManager
 	{
+		private readonly DbSet<Post> _posts;
+
 		public PostManager(AppDbContext context) : base(context)
 		{
+			_posts = context.Set<Post>();
 		}
 
-		public async Task<List<Post>?> SkipAndTakePosts(int pageIndex, int pageSize)
+		public async Task<List<Post>?> SkipAndTakePosts(int pageIndex, int pageSize, int firstPostId)
 		{
-			return await context.Set<Post>().Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.Owner).Include(p => p.Tags).ToListAsync();
+			var orderedPosts = _posts.OrderByDescending(p => p.CreateDate);
+
+			if (firstPostId == 0)
+			{
+				var firstPost = orderedPosts.FirstOrDefault();
+				firstPostId = firstPost == null ? 0 : firstPost.Id;
+			}
+
+			return await orderedPosts.Where(p => p.Id <= firstPostId).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.Owner).Include(p => p.Tags).ToListAsync();
 		}
 	}
 }

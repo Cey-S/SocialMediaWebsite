@@ -27,18 +27,23 @@
 <div id="progress" style="display:none">
 	<h4>Loading...</h4>
 </div>
+<div id="end" style="display:none">
+	<h4>There are no more posts...</h4>
+</div>
 
 @section Scripts {
 	<script type="text/javascript">
 
-		var pageSize = 3;
+		var pageSize = 5;
 		var pageIndex = 0;
+		var firstPostId = 0;
+		var isDataNull = false;
 
 		$(document).ready(function () {
 			GetData();
 
 			$(window).scroll(function () {
-				if ($(window).scrollTop() ==
+				if (!isDataNull && $(window).scrollTop() ==
 					$(document).height() - $(window).height()) {
 					GetData();
 				}
@@ -49,7 +54,7 @@
 			$.ajax({
 				type: 'GET',
 				url: '/Feed/GetData',
-				data: { "pageindex": pageIndex, "pagesize": pageSize },
+				data: { "pageindex": pageIndex, "pagesize": pageSize, "firstpostid": firstPostId },
 				dataType: 'json',
 				success: function (data) {
 					if (data != null) {
@@ -57,7 +62,7 @@
 						console.log(jsonObject);
 						$.each(jsonObject, function (index, post) {
 							$("#container").append(
-								'<div class="card mb-5" style="max-width: 800px; ">' +
+								'<div id="' + post.PostId + '" class="card mb-5" style="max-width: 800px; ">' +
 								'<div class="card-header">' +
 								'<div class="d-flex align-items-center">' +
 								'<img src="img/logo/hashtag_128.png" width="32" height="32"/>' +
@@ -68,14 +73,24 @@
 								'<h5 class="card-title">' + post.Title + '</h5>' +
 								'<p class="card-text" style="white-space: pre-wrap">' + post.Body + '</p>' +
 								'</div>' +
-								'<div class="card-footer" id="'+post.PostId+'tags"></div>' +
+								'<div class="card-footer" id="' + post.PostId + 'tags"></div>' +
 								'</div>');
 							var footerId = "#" + post.PostId + "tags";
-							$.each(post.PostTags, function (j, tag) { $(footerId).append('<a href="#">#' + tag + '</a>'); });
-
-
+							$.each(post.PostTags, function (j, tag) {
+								$(footerId).append('<a href="#">#' + tag + '</a>');
+							});
 						});
+
+						if (pageIndex == 0) {
+							firstPostId = $("#container div").first().attr("id");
+							console.log("First post id: " + firstPostId);
+						}
+
 						pageIndex++;
+					} else {
+						isDataNull = true;
+						console.log("data is null");
+						$("#end").show();
 					}
 				},
 				beforeSend: function () {

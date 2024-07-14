@@ -8,44 +8,50 @@ using SocialMediaWebsite.MVC.Models;
 
 namespace SocialMediaWebsite.MVC.Controllers
 {
-    public class FeedController : Controller
-    {
-        private readonly IPostManager postManager;
+	public class FeedController : Controller
+	{
+		private readonly IPostManager postManager;
 
-        public FeedController(IPostManager postManager)
-        {
-            this.postManager = postManager;
-        }
+		public FeedController(IPostManager postManager)
+		{
+			this.postManager = postManager;
+		}
 
-        public IActionResult Index()
-        {
-            //List<Post> posts = await postManager.GetAllIncludeAsync(null, p => p.Tags, p => p.Owner);
-            return View();
-        }
+		public IActionResult Index()
+		{
+			//List<Post> posts = await postManager.GetAllIncludeAsync(null, p => p.Tags, p => p.Owner);
+			return View();
+		}
 
-        [HttpGet]
-        public ActionResult GetData(int pageIndex, int pageSize)
-        {
-            List<PostVM> postVMs = new List<PostVM>();
+		[HttpGet]
+		public async Task<ActionResult> GetData(int pageIndex, int pageSize, int firstPostId)
+		{
+			List<PostVM> postVMs = new List<PostVM>();
 
-            var posts = postManager.SkipAndTakePosts(pageIndex, pageSize).Result;
-            posts.ForEach(p =>
-            {
+			var posts = await postManager.SkipAndTakePosts(pageIndex, pageSize, firstPostId);
+			
+			if (posts == null || posts.Count == 0)
+			{
+				return Json(null);
+			}
+
+			posts.ForEach(p =>
+			{
 				List<string> postTags = new List<string>();
-                p.Tags.ForEach(t => { postTags.Add(t.TagName); });
+				p.Tags.ForEach(t => { postTags.Add(t.TagName); });
 
-                postVMs.Add(new PostVM
-                {
-                    PostId = p.Id,
-                    Username = p.Owner.UserName,
-                    Title = p.Title,
-                    Body = p.Body,
-                    PostTags = postTags
-                });
-            });
-            var json = JsonConvert.SerializeObject(postVMs);
+				postVMs.Add(new PostVM
+				{
+					PostId = p.Id,
+					Username = p.Owner.UserName,
+					Title = p.Title,
+					Body = p.Body,
+					PostTags = postTags
+				});
+			});
+			var json = JsonConvert.SerializeObject(postVMs);
 
-            return Json(json);
-        }
-    }
+			return Json(json);
+		}
+	}
 }
