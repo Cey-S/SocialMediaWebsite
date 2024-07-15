@@ -84,6 +84,12 @@ button.accept-policy {
     padding: 0 0.5rem;
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.btn-delete-tag {
+    cursor: pointer;
 }
 
 #tag-write-area:focus {

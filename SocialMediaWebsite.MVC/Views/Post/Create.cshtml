@@ -26,16 +26,11 @@
 			</div>
 			<!--Card Footer-->
 			<div id="selected-tags" class="card-footer d-flex flex-wrap">
-				@* <input id="btn-add-tag" class="rounded-pill border-0 bg-gradient mb-2 ps-2 pe-2" type="text" placeholder="#add tags to help people find your posts" /> *@
-				@* <button type="button" id="btn-add-tag" class="rounded-pill border-0 bg-gradient mb-2">
-					<span id="tag-write-area" class="ps-2 pe-2" onmousedown="FocusToTagArea(this)" onblur="FocusOutFromTagArea(this)">#add tags to help people find your posts</span>
-				</button> *@
-				<div id="btn-add-tag" class="d-flex justify-content-between rounded-pill border-0 bg-gradient mb-2 ps-2 pe-2">
+				<div id="btn-add-tag" class="rounded-pill border-0 bg-gradient mb-2 ps-2 pe-2">
 					<div class="d-flex justify-content-center">
 						<span class="ms-2 pe-0">#</span>
 						<span id="tag-write-area" class="me-2 ps-1 pe-1" type="text" onblur="FocusOutFromTagArea()">add tags to help people find your posts</span>
 					</div>
-					<span id="btn-clear" class="d-none">✕</span>
 				</div>
 			</div>
 		</div>
@@ -50,7 +45,7 @@
 		var selectedTags;
 
 		var tagCount;
-		var tagDeletedIndex;
+		var tagDeleteIndex;
 
 		$(document).ready(function () {
 			selectedTags = document.getElementById("selected-tags");
@@ -67,26 +62,65 @@
 			});
 
 			tagCount = 0;
-			tagDeletedIndex = -1;
+			tagDeleteIndex = -1;
 		});
 
 		function AddTag(tagName) {
 			tagName = tagName.trim();
 			if (tagName.length < 1) return;
 
+			// Create parent div
+			const div = document.createElement("div");
+			div.id = tagCount;
+			div.classList.add("post-tag");
+			div.classList.add("rounded-pill");
+			// Add click event to div => Clicking a tag will toggle the delete button visibility
+			div.addEventListener("click", function () {
+				let deleteBtn = this.querySelector(".btn-delete-tag");
+				if (deleteBtn.classList.contains('d-none')) {
+					deleteBtn.classList.remove('d-none');
+				} else {
+					deleteBtn.classList.add('d-none');
+				}
+			});
+
+			// Create span element for tag name
 			const node = document.createElement("span");
 			const textnode = document.createTextNode("#" + tagName);
-			node.classList.add("post-tag");
-			node.classList.add("rounded-pill");
 			node.appendChild(textnode);
-			selectedTags.insertBefore(node, addTagButton);
+			div.appendChild(node);
 
-			var tagAspForHtml = '';
-			tagAspForHtml += '<input type="hidden" name="TagNames[' + tagCount + ']" value="' + tagName + '" />'
-			$("#selected-tags").append(tagAspForHtml);
+			// Create delete button
+			div.innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" class="btn-delete-tag d-none ms-2" onclick="DeleteTag(this)" width="16" height="16" fill="currentColor" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
+
+			// Create hidden input for tag value to submit
+			const tagAspForHtml = '<input type="hidden" name="TagNames[' + tagCount + ']" value="' + tagName + '" />'
+			div.innerHTML += tagAspForHtml;
+
+			selectedTags.insertBefore(div, addTagButton);
 			tagCount++;
-
 			tagWriteArea.textContent = "";
+		}
+
+		function DeleteTag(element) {
+			let tagToDelete = element.parentElement;
+			tagDeleteIndex = tagToDelete.id;
+			tagToDelete.remove();
+			tagCount--;
+			ReOrderTags(tagDeleteIndex);
+		}
+
+		// Shift the elements after the deleted element to fill its place, this is important to submit TagNames[i] correctly
+		function ReOrderTags(index) {
+			let remainingTagsCount = (selectedTags.childElementCount - 1); // addTagButton is also a child of selectedTags => -1
+			if (remainingTagsCount > 0) {
+				for (let i = Number(index); i < remainingTagsCount; i++) {
+					var nodeToShift = i + 1;
+					var tagDiv = document.getElementById(nodeToShift);
+					tagDiv.id = i;
+					tagDiv.querySelector("input").setAttribute("name", "TagNames[" + i + "]");
+				}
+			}
 		}
 
 		function FocusToTagArea() {
