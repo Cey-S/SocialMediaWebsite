@@ -27,9 +27,16 @@
 			<!--Card Footer-->
 			<div id="selected-tags" class="card-footer d-flex flex-wrap">
 				@* <input id="btn-add-tag" class="rounded-pill border-0 bg-gradient mb-2 ps-2 pe-2" type="text" placeholder="#add tags to help people find your posts" /> *@
-				<button type="button" id="btn-add-tag" class="rounded-pill border-0 bg-gradient mb-2">
+				@* <button type="button" id="btn-add-tag" class="rounded-pill border-0 bg-gradient mb-2">
 					<span id="tag-write-area" class="ps-2 pe-2" onmousedown="FocusToTagArea(this)" onblur="FocusOutFromTagArea(this)">#add tags to help people find your posts</span>
-				</button>
+				</button> *@
+				<div id="btn-add-tag" class="d-flex justify-content-between rounded-pill border-0 bg-gradient mb-2 ps-2 pe-2">
+					<div class="d-flex justify-content-center">
+						<span class="ms-2 pe-0">#</span>
+						<span id="tag-write-area" class="me-2 ps-1 pe-1" type="text" onblur="FocusOutFromTagArea()">add tags to help people find your posts</span>
+					</div>
+					<span id="btn-clear" class="d-none">✕</span>
+				</div>
 			</div>
 		</div>
 		<button type="submit" class="btn btn-secondary mt-3 align-self-end">Create Post</button>
@@ -49,6 +56,8 @@
 			selectedTags = document.getElementById("selected-tags");
 			tagWriteArea = document.getElementById("tag-write-area");
 			addTagButton = document.getElementById("btn-add-tag");
+
+			addTagButton.addEventListener("click", FocusToTagArea);
 
 			tagWriteArea.addEventListener("keypress", function (event) {
 				if (event.key === "Enter") {
@@ -77,21 +86,21 @@
 			tagWriteArea.innerHTML = "";
 		}
 
-		function FocusToTagArea(element) {
-			if (document.activeElement === element) return;
-			element.innerHTML = "";
-			element.setAttribute("contenteditable", true);
-			element.focus();
+		function FocusToTagArea() {
+			if (document.activeElement === tagWriteArea) return;
+			tagWriteArea.innerHTML = "";
+			tagWriteArea.setAttribute("contenteditable", true);
+			tagWriteArea.focus();
 		}
 
-		function FocusOutFromTagArea(element) {
-			if (document.getElementById("selected-tags").childElementCount > 1) {
-				element.innerHTML = "#add another tag";
+		function FocusOutFromTagArea() {
+			if (selectedTags.childElementCount > 1) {
+				tagWriteArea.innerHTML = "add another tag";
 			}
 			else {
-				element.innerHTML = "#add tags to help people find your posts";
+				tagWriteArea.innerHTML = "add tags to help people find your posts";
 			}
-			element.setAttribute("contenteditable", false);
+			tagWriteArea.setAttribute("contenteditable", false);
 		}
 	</script>
 }
