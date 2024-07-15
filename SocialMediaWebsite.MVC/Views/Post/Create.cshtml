@@ -62,7 +62,7 @@
 			tagWriteArea.addEventListener("keypress", function (event) {
 				if (event.key === "Enter") {
 					event.preventDefault();
-					AddTag(tagWriteArea.innerHTML);
+					AddTag(tagWriteArea.textContent);
 				}
 			});
 
@@ -71,6 +71,9 @@
 		});
 
 		function AddTag(tagName) {
+			tagName = tagName.trim();
+			if (tagName.length < 1) return;
+
 			const node = document.createElement("span");
 			const textnode = document.createTextNode("#" + tagName);
 			node.classList.add("post-tag");
@@ -83,22 +86,22 @@
 			$("#selected-tags").append(tagAspForHtml);
 			tagCount++;
 
-			tagWriteArea.innerHTML = "";
+			tagWriteArea.textContent = "";
 		}
 
 		function FocusToTagArea() {
 			if (document.activeElement === tagWriteArea) return;
-			tagWriteArea.innerHTML = "";
+			tagWriteArea.textContent = "";
 			tagWriteArea.setAttribute("contenteditable", true);
 			tagWriteArea.focus();
 		}
 
 		function FocusOutFromTagArea() {
 			if (selectedTags.childElementCount > 1) {
-				tagWriteArea.innerHTML = "add another tag";
+				tagWriteArea.textContent = "add another tag";
 			}
 			else {
-				tagWriteArea.innerHTML = "add tags to help people find your posts";
+				tagWriteArea.textContent = "add tags to help people find your posts";
 			}
 			tagWriteArea.setAttribute("contenteditable", false);
 		}
