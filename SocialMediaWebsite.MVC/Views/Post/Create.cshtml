@@ -16,11 +16,12 @@
 			<!--Card Body-->
 			<div class="card-body">
 				<div class="card-title">
-					<input class="w-100 fs-5 border-0" asp-for="@Model.Title" placeholder="Write the Title of your post here..." contenteditable="true" />
+					<input class="w-100 fs-5 border-0" asp-for="@Model.Title" maxlength="150" placeholder="Write the Title of your post here..." contenteditable="true" />
 					<span asp-validation-for="@Model.Title" class="text-danger"></span>
 				</div>
 				<div class="card-text">
-					<textarea class="w-100 border-0" asp-for="@Model.Body" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' placeholder="Go ahead and share your thoughts here..." contenteditable="true"></textarea>
+					<textarea id="body-text" class="w-100 border-0" asp-for="@Model.Body" maxlength="4000" oninput='CountCharInBody(4000);this.style.height = "";this.style.height = this.scrollHeight + "px"' placeholder="Go ahead and share your thoughts here..." contenteditable="true"></textarea>
+					<span id="count-char" class="float-end rounded-pill ps-1 pe-1 mt-1 me-1 bg-info bg-opacity-10 text-muted">0 / 4000</span>
 					<span asp-validation-for="@Model.Body" class="text-danger"></span>
 				</div>
 			</div>
@@ -45,7 +46,7 @@
 		var selectedTags;
 
 		var tagCount;
-		var tagDeleteIndex;
+		var tagDeleteIndex;		
 
 		$(document).ready(function () {
 			selectedTags = document.getElementById("selected-tags");
@@ -54,10 +55,17 @@
 
 			addTagButton.addEventListener("click", FocusToTagArea);
 
-			tagWriteArea.addEventListener("keypress", function (event) {
-				if (event.key === "Enter") {
+			tagWriteArea.addEventListener("keydown", function (event) { // keypress is deprecated
+				const key = event.key;
+				if (key === "Enter") {
 					event.preventDefault();
 					AddTag(tagWriteArea.textContent);
+				}
+				// Limit tag length to 50 (tag entity config)
+				if (tagWriteArea.textContent.trim().length > 49) {
+					if (key !== "Backspace" && key !== "Delete" && key !== "ArrowLeft" && key !== "ArrowRight") {
+						event.preventDefault();
+					}
 				}
 			});
 
@@ -138,6 +146,11 @@
 				tagWriteArea.textContent = "add tags to help people find your posts";
 			}
 			tagWriteArea.setAttribute("contenteditable", false);
+		}
+
+		function CountCharInBody(textMax){
+			var textLength = $("#body-text").val().length;
+			$('#count-char').html(textLength + ' / ' + textMax);
 		}
 	</script>
 }
