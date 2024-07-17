@@ -11,17 +11,35 @@ namespace SocialMediaWebsite.Console
             AppDbContext dbContext = new AppDbContext();
 
             #region Add new user
-            //var user = new User
+            //var user1 = new User
+            //{
+            //    Name = "Ali",
+            //    Surname = "Yilmaz",
+            //    UserName = "aliyilmaz",
+            //    Email = "ali@gmail.com",
+            //    Password = "123",
+            //};
+            //var user2 = new User
+            //{
+            //    Name = "Veli",
+            //    Surname = "Yilmaz",
+            //    UserName = "veliyilmaz",
+            //    Email = "veli@gmail.com",
+            //    Password = "456",
+            //};
+            //var user3 = new User
             //{
             //    Name = "Ayse",
             //    Surname = "Kaya",
             //    UserName = "aysekaya",
             //    Email = "ayse@gmail.com",
-            //    Password = "789",                
+            //    Password = "789",
             //};
-            //dbContext.Users.Add(user);
+            //dbContext.Users.Add(user1);
+            //dbContext.Users.Add(user2);
+            //dbContext.Users.Add(user3);
             //var result = dbContext.SaveChanges();
-            //System.Console.WriteLine(result + " row affected"); 
+            //System.Console.WriteLine(result + " row affected");
             #endregion
 
             #region User follows another User
@@ -180,9 +198,9 @@ namespace SocialMediaWebsite.Console
             #endregion
 
             #region Checking posts and tags
-            User ali = dbContext.Users.Where(p => p.UserName.Contains("ali")).Include(p => p.Posts).ThenInclude(p => p.Tags).FirstOrDefault();
-            User veli = dbContext.Users.Where(p => p.UserName.Contains("veli")).Include(p => p.Posts).ThenInclude(p => p.Tags).FirstOrDefault();
-            User ayse = dbContext.Users.Where(p => p.UserName.Contains("ayse")).Include(p => p.Posts).ThenInclude(p => p.Tags).FirstOrDefault();
+            //User ali = dbContext.Users.Where(p => p.UserName.Contains("ali")).Include(p => p.Posts).ThenInclude(p => p.Tags).FirstOrDefault();
+            //User veli = dbContext.Users.Where(p => p.UserName.Contains("veli")).Include(p => p.Posts).ThenInclude(p => p.Tags).FirstOrDefault();
+            //User ayse = dbContext.Users.Where(p => p.UserName.Contains("ayse")).Include(p => p.Posts).ThenInclude(p => p.Tags).FirstOrDefault();
 
             #region All Posts
             //ali.Posts.ForEach(p =>
@@ -210,14 +228,14 @@ namespace SocialMediaWebsite.Console
             #endregion
 
             #region Posts with the tag "Aliquam"
-            Tag specificTag = dbContext.Tags.Where(p => p.TagName.Equals("Aliquam")).Include(p => p.Posts).FirstOrDefault();
-            System.Console.WriteLine($"--> There are {specificTag.Posts.Count} posts in #Aliquam tag:\n");
-            specificTag.Posts.ForEach(p =>
-            {
-                System.Console.WriteLine($"{p.Owner.UserName}'s Post: {p.Title}\n\n{p.Body}\n");
-                p.Tags.ForEach(x => { System.Console.Write($"#{x.TagName} "); });
-                System.Console.WriteLine("\n-----------------------------------------------\n");
-            });
+            //Tag specificTag = dbContext.Tags.Where(p => p.TagName.Equals("Aliquam")).Include(p => p.Posts).FirstOrDefault();
+            //System.Console.WriteLine($"--> There are {specificTag.Posts.Count} posts in #Aliquam tag:\n");
+            //specificTag.Posts.ForEach(p =>
+            //{
+            //    System.Console.WriteLine($"{p.Owner.UserName}'s Post: {p.Title}\n\n{p.Body}\n");
+            //    p.Tags.ForEach(x => { System.Console.Write($"#{x.TagName} "); });
+            //    System.Console.WriteLine("\n-----------------------------------------------\n");
+            //});
             #endregion
             #endregion
         }
