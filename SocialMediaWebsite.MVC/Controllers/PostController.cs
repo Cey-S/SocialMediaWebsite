@@ -68,8 +68,11 @@ namespace SocialMediaWebsite.MVC.Controllers
 				}
 				else
 				{
-					Tag newTag = new Tag() { TagName = item };
-					post.Tags.Add(newTag);
+					if (!post.Tags.Where(p => p.TagName.Equals(item)).Any())
+					{
+						Tag newTag = new Tag() { TagName = item };
+						post.Tags.Add(newTag);
+					}					
 				}
 			}
 
