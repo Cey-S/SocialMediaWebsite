@@ -53,14 +53,14 @@
 		function GetData() {
 			$.ajax({
 				type: 'GET',
-				url: '/Feed/GetData',
+				url: '/api/Feed/GetData',
 				data: { "pageindex": pageIndex, "pagesize": pageSize, "firstpostid": firstPostId },
 				dataType: 'json',
 				success: function (data) {
 					if (data != null) {
-						var jsonObject = $.parseJSON(data);
-						console.log(jsonObject);
-						$.each(jsonObject, function (index, post) {
+						console.log(data);						
+						
+						$.each(data, function (index, post) {
 							$("#container").append(
 								'<div id="' + post.PostId + '" class="card mb-5" style="max-width: 800px; ">' +
 								'<div class="card-header">' +

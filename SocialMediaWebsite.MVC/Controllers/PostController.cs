@@ -20,10 +20,10 @@ namespace SocialMediaWebsite.MVC.Controllers
 			this.tagManager = tagManager;
 		}
 
-		//public IActionResult Index()
-		//{
-		//	return View();
-		//}
+		public IActionResult Index()
+		{
+			return View();
+		}
 
 		[HttpGet]
 		public IActionResult Create()
@@ -80,7 +80,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 				return View(vM);
 			}
 
-			return RedirectToAction("Index", "Feed");
+			return RedirectToAction("Index");
 		}
 	}
 }

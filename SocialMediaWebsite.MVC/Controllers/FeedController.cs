@@ -8,7 +8,9 @@ using SocialMediaWebsite.MVC.Models;
 
 namespace SocialMediaWebsite.MVC.Controllers
 {
-	public class FeedController : Controller
+	[Route("api/[controller]/[action]")]
+	[ApiController]
+	public class FeedController : ControllerBase
 	{
 		private readonly IPostManager postManager;
 
@@ -17,11 +19,6 @@ namespace SocialMediaWebsite.MVC.Controllers
 			this.postManager = postManager;
 		}
 
-		public IActionResult Index()
-		{
-			//List<Post> posts = await postManager.GetAllIncludeAsync(null, p => p.Tags, p => p.Owner);
-			return View();
-		}
 
 		[HttpGet]
 		public async Task<ActionResult> GetData(int pageIndex, int pageSize, int firstPostId)
@@ -32,7 +29,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 			
 			if (posts == null || posts.Count == 0)
 			{
-				return Json(null);
+				return Ok(null);
 			}
 
 			posts.ForEach(p =>
@@ -51,7 +48,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 			});
 			var json = JsonConvert.SerializeObject(postVMs);
 
-			return Json(json);
+			return Ok(json);
 		}
 	}
 }

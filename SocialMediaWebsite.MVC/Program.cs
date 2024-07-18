@@ -39,7 +39,7 @@ namespace SocialMediaWebsite.MVC
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Feed}/{action=Index}/{id?}");
+                pattern: "{controller=Post}/{action=Index}/{id?}");
 
             app.Run();
         }
