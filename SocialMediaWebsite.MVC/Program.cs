@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaWebsite.BLL.Abstract;
 using SocialMediaWebsite.BLL.Concrete;
 using SocialMediaWebsite.Core.BusinessLogic;
+using SocialMediaWebsite.Core.Entities;
 using SocialMediaWebsite.Entities.DbContexts;
 
 namespace SocialMediaWebsite.MVC
@@ -20,7 +22,26 @@ namespace SocialMediaWebsite.MVC
             builder.Services.AddScoped(typeof(IManager<,>), typeof(Manager<,>));
             builder.Services.AddScoped<IPostManager, PostManager>();
 
-            var app = builder.Build();
+            builder.Services.AddIdentity<MyUser, IdentityRole>(options =>
+			{
+				options.Password.RequireDigit = false; 
+				options.Password.RequireLowercase = false; 
+				options.Password.RequireUppercase = false; 
+				options.Password.RequiredLength = 3;
+				options.Password.RequireNonAlphanumeric = false; 
+
+
+				options.User.RequireUniqueEmail = true;
+				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+				options.Lockout.MaxFailedAccessAttempts = 5; 
+				options.SignIn.RequireConfirmedPhoneNumber = false;
+				options.SignIn.RequireConfirmedEmail = false; 
+				options.SignIn.RequireConfirmedAccount = false;
+			}).AddEntityFrameworkStores<AppDbContext>()
+				.AddDefaultTokenProviders(); 
+
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

@@ -10,5 +10,7 @@ namespace SocialMediaWebsite.Core.Entities
     {
         public int Id { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.UtcNow;
+        public string? MyUserId { get; set; }
+        public MyUser? MyUser { get; set; }
     }
 }

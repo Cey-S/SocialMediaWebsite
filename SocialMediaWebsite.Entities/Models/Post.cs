@@ -13,9 +13,6 @@ namespace SocialMediaWebsite.Entities.Models
         public string Body { get; set; }
 
         #region 1-N Relationships
-        public int UserId { get; set; }
-        public User Owner { get; set; } // Post Owner
-
         public List<Photo>? Photos { get; set; } = new List<Photo>();
         public List<Interaction>? Interactions { get; set; } = new List<Interaction>();
         public List<Comment>? Comments { get; set; } = new List<Comment>();

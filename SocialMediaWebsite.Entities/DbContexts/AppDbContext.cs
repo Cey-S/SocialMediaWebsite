@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SocialMediaWebsite.Core.Entities;
 using SocialMediaWebsite.Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -9,15 +12,14 @@ using System.Threading.Tasks;
 
 namespace SocialMediaWebsite.Entities.DbContexts
 {
-    public class AppDbContext : DbContext
-    {
+    public class AppDbContext : IdentityDbContext<MyUser, IdentityRole, string>
+	{
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Interaction> Interactions { get; set; }
         public DbSet<InteractionType> InteractionTypes { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Tag> Tags { get; set; }
-        public DbSet<User> Users { get; set; }
 
         public AppDbContext()
         {
@@ -36,7 +38,8 @@ namespace SocialMediaWebsite.Entities.DbContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+			base.OnModelCreating(modelBuilder);
+			modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

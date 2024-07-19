@@ -40,7 +40,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 				postVMs.Add(new PostVM
 				{
 					PostId = p.Id,
-					Username = p.Owner.UserName,
+					Username = p.MyUser.UserName,
 					Title = p.Title,
 					Body = p.Body,
 					PostTags = postTags

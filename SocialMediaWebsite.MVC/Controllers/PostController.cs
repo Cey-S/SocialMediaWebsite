@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SocialMediaWebsite.BLL.Abstract;
 using SocialMediaWebsite.Core.BusinessLogic;
+using SocialMediaWebsite.Core.Entities;
 using SocialMediaWebsite.Entities.DbContexts;
 using SocialMediaWebsite.Entities.Models;
 using SocialMediaWebsite.MVC.Models;
@@ -10,10 +13,10 @@ namespace SocialMediaWebsite.MVC.Controllers
 	public class PostController : Controller
 	{
 		private readonly IPostManager postManager;
-		private readonly IManager<AppDbContext, User> userManager;
+		private readonly UserManager<MyUser> userManager;
 		private readonly IManager<AppDbContext, Tag> tagManager;
 
-		public PostController(IPostManager postManager, IManager<AppDbContext, User> userManager, IManager<AppDbContext, Tag> tagManager)
+		public PostController(IPostManager postManager, UserManager<MyUser> userManager, IManager<AppDbContext, Tag> tagManager)
 		{
 			this.postManager = postManager;
 			this.userManager = userManager;
@@ -44,7 +47,8 @@ namespace SocialMediaWebsite.MVC.Controllers
 				return View(vM);
 			}
 
-			var user = await userManager.GetAsync(p => p.UserName.Equals(vM.Username));
+			var user = await userManager.Users.Where(p => p.UserName.Equals(vM.Username)).FirstOrDefaultAsync();
+			//var user = await userManager.GetAsync(p => p.UserName.Equals(vM.Username));
 			if (user == null)
 			{
 				// This username does not exist in the database
@@ -53,7 +57,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 
 			Post post = new Post()
 			{
-				Owner = user,
+				MyUser = user, // Post owner
 				Title = vM.Title,
 				Body = vM.Body
 			};

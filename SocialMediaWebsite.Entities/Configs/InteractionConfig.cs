@@ -17,7 +17,7 @@ namespace SocialMediaWebsite.Entities.Configs
 
             // A User may interact with a Post only once with the specified Interaction Type
             // e.g., User 1 can Like (interaction type) Post 1 only once
-            builder.HasIndex(p => new {p.UserId, p.PostId, p.InteractionTypeId}).IsUnique();
+            builder.HasIndex(p => new {p.MyUserId, p.PostId, p.InteractionTypeId}).IsUnique();
         }
     }
 }
