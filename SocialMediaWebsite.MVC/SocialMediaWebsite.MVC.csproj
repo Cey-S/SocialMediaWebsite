@@ -7,15 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Feed\**" />
+    <Content Remove="Views\Feed\**" />
+    <EmbeddedResource Remove="Views\Feed\**" />
+    <None Remove="Views\Feed\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.6" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SocialMediaWebsite.BLL\SocialMediaWebsite.BLL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Feed\" />
   </ItemGroup>
 
 </Project>
