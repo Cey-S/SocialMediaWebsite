@@ -6,7 +6,7 @@ using SocialMediaWebsite.MVC.Models;
 
 namespace SocialMediaWebsite.MVC.Controllers
 {
-	public class AccountController(UserManager<MyUser> userManager, RoleManager<IdentityRole> roleManager) : Controller
+	public class AccountController(UserManager<MyUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<MyUser> signInManager) : Controller
 	{
 		public IActionResult Register()
 		{
@@ -72,6 +72,31 @@ namespace SocialMediaWebsite.MVC.Controllers
 			{
 				// Could not add role to user
 				ModelState.AddModelError("UserCreate", "Could not add role to user.");
+				return View(vM);
+			}
+
+			return RedirectToAction("Index", "Post");
+		}
+
+		public IActionResult Login()
+		{
+			LoginVM vm = new LoginVM();
+			return View(vm);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Login(LoginVM vM)
+		{
+			if (!ModelState.IsValid)
+			{
+				ModelState.AddModelError("AccountLogin", "Model State is not valid.");
+				return View(vM);
+			}
+
+			var result = await signInManager.PasswordSignInAsync(vM.UserName, vM.Password, vM.RememberMe, lockoutOnFailure: false);
+			if (!result.Succeeded)
+			{
+				ModelState.AddModelError("InvalidLogin", "Invalid login attempt. The email or password is incorrect.");
 				return View(vM);
 			}
 
