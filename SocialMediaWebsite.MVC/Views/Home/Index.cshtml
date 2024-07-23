@@ -1,5 +1,43 @@
 ﻿@{
 	ViewData["Title"] = "Welcome to Topics!";
-	Layout = "_LayoutHome";
 }
+
+<div id="hero-section" class="carousel slide carousel-slide position-absolute top-0 start-0 vw-100 vh-100" data-bs-ride="carousel">
+	<div class="carousel-indicators">
+		<button type="button" data-bs-target="#hero-section" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+		<button type="button" data-bs-target="#hero-section" data-bs-slide-to="1" aria-label="Slide 2"></button>
+		<button type="button" data-bs-target="#hero-section" data-bs-slide-to="2" aria-label="Slide 3"></button>
+	</div>
+	<div class="carousel-inner h-100 text-white">
+		<div class="carousel-item active h-100">
+			<div class="container position-absolute top-0 vh-100 start-0 end-0 d-flex flex-column justify-content-center align-items-center">
+				<h1 class="p-2 w-75 fw-light text-center">First slide label</h1>
+				<p class="w-75 text-center">Some representative placeholder content for the first slide.</p>
+			</div>
+			@* <img style="object-fit:cover" src="https://img.freepik.com/free-vector/flat-design-collage-background_23-2149545325.jpg?t=st=1721763816~exp=1721767416~hmac=0efae8b34f90782d39d0d0aa8f165c1b7e5381d364bbd4637b293fdb48379770&w=1380" class="d-block h-100 w-100" alt="..."> *@
+		</div>
+		<div class="carousel-item h-100">
+			<div class="container position-absolute top-0 vh-100 start-0 end-0 d-flex flex-column justify-content-center align-items-center">
+				<h1 class="p-2 w-75 fw-light text-center">Second slide label</h1>
+				<p class="w-75 text-center">Some representative placeholder content for the first slide.</p>
+			</div>
+			@* <img style="object-fit:cover" src="https://img.freepik.com/free-vector/hand-drawn-fruit-floral-design-pattern_23-2149460320.jpg?t=st=1721763683~exp=1721767283~hmac=d828d7d30df6fb97868c6279d8853a13401718124e41ad8d76fbde9e10581095&w=1380" class="d-block h-100 w-100" alt="..."> *@
+		</div>
+		<div class="carousel-item h-100">
+			<div class="container position-absolute top-0 vh-100 start-0 end-0 d-flex flex-column justify-content-center align-items-center">
+				<h1 class="p-2 w-75 fw-light text-center">Third slide label</h1>
+				<p class="w-75 text-center">Some representative placeholder content for the first slide.</p>
+			</div>
+			@* <img style="object-fit:cover" src="https://img.freepik.com/free-vector/hand-drawn-pattern-design-summertime_23-2150225979.jpg?t=st=1721763389~exp=1721766989~hmac=403c15daf2c9415e3afe14decb1a11e855b63067594d28c56f47f64d0fcaf48b&w=1380" class="d-block h-100 w-100" alt="..."> *@
+		</div>
+	</div>
+	<button class="carousel-control-prev" type="button" data-bs-target="#hero-section" data-bs-slide="prev">
+		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		<span class="visually-hidden">Previous</span>
+	</button>
+	<button class="carousel-control-next" type="button" data-bs-target="#hero-section" data-bs-slide="next">
+		<span class="carousel-control-next-icon" aria-hidden="true"></span>
+		<span class="visually-hidden">Next</span>
+	</button>
+</div>
 

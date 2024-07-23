@@ -1,0 +1,23 @@
+﻿<header>
+	<nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+		<div class="container-fluid">
+			<a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+				<img src="~/img/logo/hashtag_32.png" alt="Website Logo" /><span class="fs-4 fw-bold fst-italic ms-1">Topics</span>
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</header>
