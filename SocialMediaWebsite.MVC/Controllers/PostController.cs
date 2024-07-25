@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaWebsite.BLL.Abstract;
@@ -10,6 +11,7 @@ using SocialMediaWebsite.MVC.Models;
 
 namespace SocialMediaWebsite.MVC.Controllers
 {
+	[Authorize(Roles = "AppUser")]
 	public class PostController : Controller
 	{
 		private readonly IPostManager postManager;
