@@ -19,14 +19,14 @@
 							<div class="row gy-3 overflow-hidden">
 								<div class="col-12">
 									<div class="form-floating mb-3">
-										<input asp-for="UserName" class="form-control border-0 border-bottom rounded-0" id="username" placeholder="Username">
+										<input asp-for="UserName" class="form-control border-0 border-bottom rounded-0" placeholder="Username">
 										<label asp-for="UserName" class="form-label">Username</label>
 										<span asp-validation-for="UserName" class="text-danger float-end"></span>
 									</div>
 								</div>
 								<div class="col-12">
 									<div class="form-floating mb-3">
-										<input asp-for="Password" class="form-control border-0 border-bottom rounded-0" id="password" placeholder="Password">
+										<input asp-for="Password" class="form-control border-0 border-bottom rounded-0" placeholder="Password">
 										<label asp-for="Password" class="form-label">Password</label>
 										<span asp-validation-for="Password" class="text-danger float-end"></span>
 									</div>
@@ -35,7 +35,7 @@
 									<div class="row justify-content-between">
 										<div class="col-6">
 											<div class="form-check">
-												<input class="form-check-input" type="checkbox" asp-for="RememberMe" id="remember_me">
+												<input class="form-check-input" type="checkbox" asp-for="RememberMe">
 												<label class="form-check-label text-secondary" asp-for="RememberMe">
 													Remember me
 												</label>
