@@ -13,7 +13,15 @@ namespace SocialMediaWebsite.MVC.Components
 		{
 			var user = await userManager.FindByNameAsync(User.Identity.Name);
 			var userRoles = await userManager.GetRolesAsync(user);
-			UserInfoVM vm = new UserInfoVM() { UserName = user.UserName, Role = userRoles.FirstOrDefault() };
+
+			if (user.ImagePath != null) { }
+
+			UserInfoVM vm = new UserInfoVM()
+			{
+				ProfilePicture = user.ImagePath != null ? user.ImagePath : "../img/logo/hashtag_32.png",
+				UserName = user.UserName,
+				Role = userRoles.FirstOrDefault()
+			};
 			return View(vm);
 		}
 	}

@@ -21,4 +21,8 @@
     <ProjectReference Include="..\SocialMediaWebsite.BLL\SocialMediaWebsite.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\user-uploads\" />
+  </ItemGroup>
+
 </Project>

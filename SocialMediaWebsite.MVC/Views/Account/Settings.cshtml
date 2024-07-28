@@ -1,0 +1,85 @@
+﻿@model SettingsVM
+<div class="container">
+	<div class="row">
+		<div class="col-12">
+			<!-- Page title -->
+			<div class="my-5">
+				<h3>Profile Settings</h3>
+				<hr>
+			</div>
+			<!-- Form START -->
+			<form id="user-settings" asp-action="Settings" method="post" enctype="multipart/form-data">
+				<div class="row mb-5 gx-5">
+					<!-- Contact detail -->
+					<div class="col-xxl-8 mb-5 mb-xxl-0">
+						<div class="bg-secondary bg-opacity-10 px-4 py-5 rounded">
+							<div class="row g-3">
+								<h4 class="mb-4 mt-0">Account Information</h4>
+								<div class="text-danger text-center">@Html.ValidationMessage("UpdateProfile")</div>
+								<input asp-for="UserID" type="hidden" />
+								<!-- First Name -->
+								<div class="col-md-6">
+									<label asp-for="FirstName" class="form-label">First Name</label>
+									<input asp-for="FirstName" class="form-control" aria-label="First name" value="@Model.FirstName">
+									<span asp-validation-for="FirstName"></span>
+								</div>
+								<!-- Last name -->
+								<div class="col-md-6">
+									<label asp-for="LastName" class="form-label">Last Name</label>
+									<input asp-for="LastName" class="form-control" aria-label="Last name" value="@Model.LastName">
+									<span asp-validation-for="LastName"></span>
+								</div>
+								<!-- Last name -->
+								<div class="col-md-6">
+									<label asp-for="Username" class="form-label">Username *</label>
+									<input asp-for="Username" class="form-control" aria-label="Username" value="@Model.Username" disabled>
+									<span asp-validation-for="Username"></span>
+									<span class="text-danger float-end">@Html.ValidationMessage("UsernameExists")</span>
+								</div>
+								<!-- Email -->
+								<div class="col-md-6">
+									<label asp-for="Email" class="form-label">Email *</label>
+									<input asp-for="Email" class="form-control" value="@Model.Email" disabled>
+									<span asp-validation-for="Email"></span>
+									<span class="text-danger float-end">@Html.ValidationMessage("EmailExists")</span>
+								</div>
+								<!-- Phone number -->
+								<div class="col-md-6">
+									<label asp-for="Phone" class="form-label">Phone</label>
+									<input asp-for="Phone" class="form-control" aria-label="Phone number" value="@Model.Phone">
+									<span asp-validation-for="Phone"></span>
+								</div>
+								<!-- Change Password -->
+								<div class="col-md-6">
+									<label for="change-password" class="form-label">Password</label>
+									<button asp-action="ChangePassword" id="change-password" class="form-control btn btn-outline-dark fs-6" type="button">Change Password &#8594;</button>
+								</div>
+							</div> <!-- Row END -->
+						</div>
+					</div>
+					<!-- Upload profile picture -->
+					<div class="col-xxl-4">
+						<div class="bg-secondary bg-opacity-10 px-4 py-5 rounded">
+							<div class="row g-3">
+								<h4 class="mb-4 mt-0">Upload your profile photo</h4>
+								<div class="mb-3">
+									<label asp-for="FormFile" class="form-label">Choose a profile picture:</label>
+									<input asp-for="FormFile" class="form-control" accept="image/*">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> <!-- Row END -->
+				<!-- button -->
+				<div class="gap-3 d-md-flex justify-content-md-end text-center">
+					<button type="button" class="btn btn-danger btn-lg">Delete profile</button>
+					<button type="submit" class="btn btn-primary btn-lg">Update profile</button>
+				</div>
+			</form> <!-- Form END -->
+		</div>
+	</div>
+</div>
+@section Scripts
+{
+	<partial name="_ValidationScriptsPartial" />
+}
