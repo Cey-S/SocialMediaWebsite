@@ -7,6 +7,7 @@ namespace SocialMediaWebsite.MVC.Models
 	{
 		[Required]
 		[DisplayName("Username")]
+		[RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Only Alphabets and Numbers allowed.")]
 		[MaxLength(50, ErrorMessage = "Username can be maximum 50 characters")]
 		public string UserName { get; set; }
 

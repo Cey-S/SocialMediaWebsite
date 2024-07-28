@@ -50,7 +50,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 			if (!result.Succeeded)
 			{
 				// Could not create user
-				ModelState.AddModelError("UserCreate", "Could not create user.");
+				ModelState.AddModelError("UserCreate", $"Could not create user. {result.Errors.First().Description}");
 				return View(vM);
 			}
 
@@ -61,7 +61,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 				if (!roleResult.Succeeded)
 				{
 					// Could not create role
-					ModelState.AddModelError("RoleCreate", "Could not create role.");
+					ModelState.AddModelError("UserCreate", $"Could not create user. {result.Errors.First().Description}");
 					return View(vM);
 				}
 			}
@@ -71,7 +71,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 			if (!userResult.Succeeded)
 			{
 				// Could not add role to user
-				ModelState.AddModelError("UserCreate", "Could not add role to user.");
+				ModelState.AddModelError("UserCreate", $"Could not create user. {result.Errors.First().Description}");
 				return View(vM);
 			}
 
