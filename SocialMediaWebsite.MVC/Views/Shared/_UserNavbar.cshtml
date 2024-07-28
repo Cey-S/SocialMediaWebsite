@@ -47,7 +47,8 @@
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
 							<li>
-								<a class="dropdown-item" href="#">
+								@await Component.InvokeAsync("UserInfo")
+								@* <a class="dropdown-item" href="#">
 									<div class="d-flex">
 										<div class="flex-shrink-0 me-3">
 											<div class="avatar avatar-online">
@@ -59,7 +60,7 @@
 											<small class="text-muted">Username</small>
 										</div>
 									</div>
-								</a>
+								</a> *@
 							</li>
 							<li>
 								<div class="dropdown-divider"></div>

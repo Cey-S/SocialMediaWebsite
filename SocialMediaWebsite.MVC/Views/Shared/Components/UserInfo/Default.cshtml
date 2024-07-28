@@ -1,0 +1,14 @@
+﻿@model UserInfoVM
+<a class="dropdown-item">
+	<div class="d-flex">
+		<div class="flex-shrink-0 me-3">
+			<div class="avatar avatar-online">
+				<img src="~/img/logo/hashtag_32.png" alt="" class="w-px-40 h-auto rounded-circle">
+			</div>
+		</div>
+		<div class="flex-grow-1">
+			<span class="fw-medium d-block">@Model.UserName</span>
+			<small class="text-muted">@Model.Role</small>
+		</div>
+	</div>
+</a>
