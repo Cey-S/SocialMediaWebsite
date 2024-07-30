@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,8 +8,10 @@ using SocialMediaWebsite.MVC.Models;
 
 namespace SocialMediaWebsite.MVC.Controllers
 {
+	[Authorize(Roles = "AppUser")]
 	public class AccountController(UserManager<MyUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<MyUser> signInManager) : Controller
 	{
+		[AllowAnonymous]
 		public IActionResult Register()
 		{
 			RegistrationVM vm = new RegistrationVM();
@@ -16,6 +19,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 		}
 
 		[HttpPost]
+		[AllowAnonymous]
 		public async Task<IActionResult> Register(RegistrationVM vM)
 		{
 			if (!ModelState.IsValid)
@@ -80,6 +84,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 			return RedirectToAction("Index", "Post");
 		}
 
+		[AllowAnonymous]
 		public IActionResult Login()
 		{
 			LoginVM vm = new LoginVM();
@@ -87,6 +92,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 		}
 
 		[HttpPost]
+		[AllowAnonymous]
 		public async Task<IActionResult> Login(LoginVM vM)
 		{
 			if (!ModelState.IsValid)
