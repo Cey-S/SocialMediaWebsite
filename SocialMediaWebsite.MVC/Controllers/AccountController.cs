@@ -119,10 +119,14 @@ namespace SocialMediaWebsite.MVC.Controllers
 
 		public async Task<IActionResult> Settings()
 		{
-			var user = await userManager.FindByNameAsync(User.Identity.Name);
+			var user = await userManager.GetUserAsync(User);
+			if (user == null)
+			{
+				return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+			}
+
 			SettingsVM vm = new SettingsVM()
 			{
-				UserID = user.Id,
 				FirstName = null,
 				LastName = null,
 				Username = user.UserName,
@@ -136,11 +140,55 @@ namespace SocialMediaWebsite.MVC.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Settings(SettingsVM vM)
 		{
-			var user = await userManager.FindByIdAsync(vM.UserID);
+			var user = await userManager.GetUserAsync(User);
 			if (user == null)
 			{
-				ModelState.AddModelError("UpdateProfile", "Could not find user.");
-				return View();
+				return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+			}			
+
+			// Model state, username, email validation
+			if (!ModelState.IsValid)
+			{
+				ModelState.AddModelError("UpdateProfile", "Model State is not valid.");
+			}
+
+			if (!vM.Username.Equals(user.UserName))
+			{
+				var usernameExists = await userManager.Users.AnyAsync(p => p.UserName == vM.Username);
+				if (usernameExists)
+				{
+					ModelState.AddModelError("UsernameExists", "This username is taken. Please pick another one.");
+				}
+				else
+				{
+					// Update username
+					user.UserName = vM.Username;
+				}
+			}
+
+			if (!vM.Email.Equals(user.Email))
+			{
+				var emailExists = await userManager.Users.AnyAsync(p => p.Email == vM.Email);
+				if (emailExists)
+				{
+					ModelState.AddModelError("EmailExists", "There is already an account associated with this email address.");
+				}
+				else
+				{
+					// Update email
+					user.Email = vM.Email;
+				}
+			}			
+
+			if (ModelState.ErrorCount > 0)
+			{
+				return View(vM);
+			}
+
+			// Update phone number
+			if (vM.Phone != user.PhoneNumber)
+			{
+				user.PhoneNumber = vM.Phone;
 			}
 
 			// Save profile picture
@@ -149,7 +197,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 				var extent = Path.GetExtension(vM.FormFile.FileName);
 				var newFileName = ($"profile_picture{extent}");
 
-				var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\user-uploads", $"{vM.UserID}");
+				var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\user-uploads", $"{user.Id}");
 				if (!Directory.Exists(folderPath))
 				{
 					Directory.CreateDirectory(folderPath);
@@ -162,49 +210,19 @@ namespace SocialMediaWebsite.MVC.Controllers
 					await vM.FormFile.CopyToAsync(stream);
 				}
 
-				user.ImagePath = $"../user-uploads/{vM.UserID}/{newFileName}";
+				// Update profile picture
+				user.ImagePath = $"../user-uploads/{user.Id}/{newFileName}";
 			}
 
-			// Model state, username, email validation
-			if (!ModelState.IsValid)
-			{
-				ModelState.AddModelError("UpdateProfile", "Model State is not valid.");
-			}
-
-			//if (!vM.Username.Equals(user.UserName))
-			//{
-			//	var usernameExists = await userManager.Users.AnyAsync(p => p.UserName == vM.Username);
-			//	if (usernameExists)
-			//	{
-			//		ModelState.AddModelError("UsernameExists", "This username is taken. Please pick another one.");
-			//	}
-			//}
-
-			//if (!vM.Email.Equals(user.Email))
-			//{
-			//	var emailExists = await userManager.Users.AnyAsync(p => p.Email == vM.Email);
-			//	if (emailExists)
-			//	{
-			//		ModelState.AddModelError("EmailExists", "There is already an account associated with this email address.");
-			//	}
-			//}
-
-			//if (ModelState.ErrorCount > 0)
-			//{
-			//	return View();
-			//}
-
-			//// Update account information
-			////user.UserName = vM.Username;
-			////user.Email = vM.Email;
-			//user.PhoneNumber = vM.Phone;
-
+			// Update user
 			var result = await userManager.UpdateAsync(user);
 			if (!result.Succeeded)
 			{
 				ModelState.AddModelError("UpdateProfile", $"Could not update profile. {result.Errors.First().Description}");
-				return View();
+				return View(vM);
 			}
+
+			await signInManager.RefreshSignInAsync(user);
 
 			return RedirectToAction("Index", "Post");
 		}

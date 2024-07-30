@@ -16,7 +16,6 @@
 							<div class="row g-3">
 								<h4 class="mb-4 mt-0">Account Information</h4>
 								<div class="text-danger text-center">@Html.ValidationMessage("UpdateProfile")</div>
-								<input asp-for="UserID" type="hidden" />
 								<!-- First Name -->
 								<div class="col-md-6">
 									<label asp-for="FirstName" class="form-label">First Name</label>
@@ -32,14 +31,14 @@
 								<!-- Last name -->
 								<div class="col-md-6">
 									<label asp-for="Username" class="form-label">Username *</label>
-									<input asp-for="Username" class="form-control" aria-label="Username" value="@Model.Username" disabled>
+									<input asp-for="Username" class="form-control" aria-label="Username" value="@Model.Username">
 									<span asp-validation-for="Username"></span>
 									<span class="text-danger float-end">@Html.ValidationMessage("UsernameExists")</span>
 								</div>
 								<!-- Email -->
 								<div class="col-md-6">
 									<label asp-for="Email" class="form-label">Email *</label>
-									<input asp-for="Email" class="form-control" value="@Model.Email" disabled>
+									<input asp-for="Email" class="form-control" value="@Model.Email">
 									<span asp-validation-for="Email"></span>
 									<span class="text-danger float-end">@Html.ValidationMessage("EmailExists")</span>
 								</div>
