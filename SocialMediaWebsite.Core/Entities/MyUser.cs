@@ -10,7 +10,9 @@ namespace SocialMediaWebsite.Core.Entities
 {
 	public class MyUser : IdentityUser
 	{
-		public string? ImagePath { get; set; } // Profile Picture
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? ImagePath { get; set; } // Profile Picture
 
 		#region 1-N Relationships
 		public List<MyUser>? Followers { get; set; } = new List<MyUser>();

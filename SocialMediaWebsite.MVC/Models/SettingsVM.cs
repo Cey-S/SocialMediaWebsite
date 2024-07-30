@@ -5,8 +5,10 @@ namespace SocialMediaWebsite.MVC.Models
 {
 	public class SettingsVM
 	{
+		[MaxLength(50, ErrorMessage = "Name can be maximum 50 characters")]
         public string? FirstName { get; set; }
-        public string? LastName { get; set; }
+		[MaxLength(50, ErrorMessage = "Surname can be maximum 50 characters")]
+		public string? LastName { get; set; }
 
 		[Required]
 		[DisplayName("Username")]

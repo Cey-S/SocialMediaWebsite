@@ -127,8 +127,8 @@ namespace SocialMediaWebsite.MVC.Controllers
 
 			SettingsVM vm = new SettingsVM()
 			{
-				FirstName = null,
-				LastName = null,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
 				Username = user.UserName,
 				Email = user.Email,
 				Phone = user.PhoneNumber
@@ -189,6 +189,18 @@ namespace SocialMediaWebsite.MVC.Controllers
 			if (vM.Phone != user.PhoneNumber)
 			{
 				user.PhoneNumber = vM.Phone;
+			}
+
+			// Update first name
+			if (vM.FirstName != user.FirstName)
+			{
+				user.FirstName = vM.FirstName;
+			}
+
+			// Update last name
+			if (vM.LastName != user.LastName)
+			{
+				user.LastName = vM.LastName;
 			}
 
 			// Save profile picture
