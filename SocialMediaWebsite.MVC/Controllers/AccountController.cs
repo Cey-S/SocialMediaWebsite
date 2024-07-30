@@ -45,6 +45,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 			{
 				UserName = vM.UserName,
 				Email = vM.Email,
+				ImagePath = "../img/profile/user_128.png"
 			};
 
 			var result = await userManager.CreateAsync(user, vM.Password);

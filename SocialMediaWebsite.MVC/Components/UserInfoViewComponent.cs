@@ -18,7 +18,7 @@ namespace SocialMediaWebsite.MVC.Components
 
 			UserInfoVM vm = new UserInfoVM()
 			{
-				ProfilePicture = user.ImagePath != null ? user.ImagePath : "../img/logo/hashtag_32.png",
+				ProfilePicture = user.ImagePath,
 				UserName = user.UserName,
 				Role = userRoles.FirstOrDefault()
 			};
