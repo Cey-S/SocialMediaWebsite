@@ -6,6 +6,7 @@ namespace SocialMediaWebsite.MVC.Models
     {
         public int PostId { get; set; }
         public string Username { get; set; }
+        public string ImagePath { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
         public List<string> PostTags { get; set; } = new List<string>();

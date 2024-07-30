@@ -31,11 +31,17 @@ namespace SocialMediaWebsite.MVC.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Create()
+		public async Task<IActionResult> Create()
 		{
 			PostCreateVM vM = new PostCreateVM();
-			vM.Username = "veliyilmaz";
-			vM.ProfilePicture = "../img/logo/hashtag_128.png";
+			var user = await userManager.GetUserAsync(User);
+			if (user == null)
+			{
+				return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+			}
+
+			vM.Username = user.UserName;
+			vM.ProfilePicture = user.ImagePath;
 
 			return View(vM);
 		}

@@ -41,6 +41,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 				{
 					PostId = p.Id,
 					Username = p.MyUser.UserName,
+					ImagePath = p.MyUser.ImagePath,
 					Title = p.Title,
 					Body = p.Body,
 					PostTags = postTags

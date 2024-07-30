@@ -25,84 +25,84 @@
 
 <div id="container"></div>
 <div id="progress" style="display:none">
-	<h4>Loading...</h4>
+    <h4>Loading...</h4>
 </div>
 <div id="end" style="display:none">
-	<h4>There are no more posts...</h4>
+    <h4>There are no more posts...</h4>
 </div>
 
 @section Scripts {
-	<script type="text/javascript">
+    <script type="text/javascript">
 
-		var pageSize = 5;
-		var pageIndex = 0;
-		var firstPostId = 0;
-		var isDataNull = false;
+        var pageSize = 5;
+        var pageIndex = 0;
+        var firstPostId = 0;
+        var isDataNull = false;
 
-		$(document).ready(function () {
-			GetData();
+        $(document).ready(function () {
+            GetData();
 
-			$(window).scroll(function () {
-				if (!isDataNull && $(window).scrollTop() ==
-					$(document).height() - $(window).height()) {
-					GetData();
-				}
-			});
-		});
+            $(window).scroll(function () {
+                if (!isDataNull && $(window).scrollTop() ==
+                    $(document).height() - $(window).height()) {
+                    GetData();
+                }
+            });
+        });
 
-		function GetData() {
-			$.ajax({
-				type: 'GET',
-				url: '/api/Feed/GetData',
-				data: { "pageindex": pageIndex, "pagesize": pageSize, "firstpostid": firstPostId },
-				dataType: 'json',
-				success: function (data) {
-					if (data != null) {
-						console.log(data);						
-						
-						$.each(data, function (index, post) {
-							$("#container").append(
-								'<div id="' + post.PostId + '" class="card mb-5" style="max-width: 800px; ">' +
-								'<div class="card-header">' +
-								'<div class="d-flex align-items-center">' +
-								'<img src="img/logo/hashtag_128.png" width="32" height="32"/>' +
-								'<h6 class="card-subtitle ms-2">' + post.Username + '</h6>' +
-								'</div>' +
-								'</div>' +
-								'<div class="card-body">' +
-								'<h5 class="card-title">' + post.Title + '</h5>' +
-								'<p class="card-text" style="white-space: pre-wrap">' + post.Body + '</p>' +
-								'</div>' +
-								'<div class="card-footer" id="' + post.PostId + 'tags"></div>' +
-								'</div>');
-							var footerId = "#" + post.PostId + "tags";
-							$.each(post.PostTags, function (j, tag) {
-								$(footerId).append('<a href="#">#' + tag + '</a>');
-							});
-						});
+        function GetData() {
+            $.ajax({
+                type: 'GET',
+                url: '/api/Feed/GetData',
+                data: { "pageindex": pageIndex, "pagesize": pageSize, "firstpostid": firstPostId },
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        console.log(data);
 
-						if (pageIndex == 0) {
-							firstPostId = $("#container div").first().attr("id");
-							console.log("First post id: " + firstPostId);
-						}
+                        $.each(data, function (index, post) {
+                            $("#container").append(
+                                '<div id="' + post.PostId + '" class="card mb-5" style="max-width: 800px; ">' +
+                                '<div class="card-header">' +
+                                '<div class="d-flex align-items-center">' +
+                                '<img src="' + post.ImagePath + '" class="profile-picture rounded-circle"/>' +
+                                '<h6 class="card-subtitle ms-2">' + post.Username + '</h6>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="card-body">' +
+                                '<h5 class="card-title">' + post.Title + '</h5>' +
+                                '<p class="card-text" style="white-space: pre-wrap">' + post.Body + '</p>' +
+                                '</div>' +
+                                '<div class="card-footer" id="' + post.PostId + 'tags"></div>' +
+                                '</div>');
+                            var footerId = "#" + post.PostId + "tags";
+                            $.each(post.PostTags, function (j, tag) {
+                                $(footerId).append('<a href="#">#' + tag + '</a>');
+                            });
+                        });
 
-						pageIndex++;
-					} else {
-						isDataNull = true;
-						console.log("data is null");
-						$("#end").show();
-					}
-				},
-				beforeSend: function () {
-					$("#progress").show();
-				},
-				complete: function () {
-					$("#progress").hide();
-				},
-				error: function () {
-					alert("Error while retrieving data!");
-				}
-			});
-		}
-	</script>
+                        if (pageIndex == 0) {
+                            firstPostId = $("#container div").first().attr("id");
+                            console.log("First post id: " + firstPostId);
+                        }
+
+                        pageIndex++;
+                    } else {
+                        isDataNull = true;
+                        console.log("data is null");
+                        $("#end").show();
+                    }
+                },
+                beforeSend: function () {
+                    $("#progress").show();
+                },
+                complete: function () {
+                    $("#progress").hide();
+                },
+                error: function () {
+                    alert("Error while retrieving data!");
+                }
+            });
+        }
+    </script>
 }
