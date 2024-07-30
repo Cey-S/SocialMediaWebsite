@@ -17,6 +17,7 @@ namespace SocialMediaWebsite.MVC.Models
 
 		[Required]
 		[DataType(DataType.Password)]
+		[MinLength(3, ErrorMessage = "Password must be minimum 3 characters")]
 		public string Password { get; set; }
 
 		[Required]
