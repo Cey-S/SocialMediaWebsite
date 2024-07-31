@@ -144,7 +144,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 			if (user == null)
 			{
 				return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
-			}			
+			}
 
 			// Model state, username, email validation
 			if (!ModelState.IsValid)
@@ -178,7 +178,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 					// Update email
 					user.Email = vM.Email;
 				}
-			}			
+			}
 
 			if (ModelState.ErrorCount > 0)
 			{
@@ -237,6 +237,22 @@ namespace SocialMediaWebsite.MVC.Controllers
 			await signInManager.RefreshSignInAsync(user);
 
 			return RedirectToAction("Index", "Post");
+		}
+
+		public async Task<IActionResult> Profile(string? username)
+		{
+			if (username == null)
+			{
+				username = User.Identity.Name;
+			}
+
+			MyUser user = await userManager.FindByNameAsync(username);
+			if (user == null)
+			{
+				return NotFound($"Unable to load user with username '{username}'.");
+			}
+
+			return View("Profile", username);
 		}
 	}
 }

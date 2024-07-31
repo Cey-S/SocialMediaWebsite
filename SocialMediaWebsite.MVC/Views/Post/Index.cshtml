@@ -65,8 +65,8 @@
                                 '<div id="' + post.PostId + '" class="card mb-5" style="max-width: 800px; ">' +
                                 '<div class="card-header">' +
                                 '<div class="d-flex align-items-center">' +
-                                '<img src="' + post.ImagePath + '" class="profile-picture rounded-circle"/>' +
-                                '<h6 class="card-subtitle ms-2">' + post.Username + '</h6>' +
+                                '<a href="/Account/Profile?username=' + post.Username + '" class="profile-link"><img src="' + post.ImagePath + '" class="profile-picture rounded-circle"/></a>' +
+                                '<a href="/Account/Profile?username=' + post.Username + '" class="profile-link"><h6 class="card-subtitle ms-2">' + post.Username + '</h6></a>' +
                                 '</div>' +
                                 '</div>' +
                                 '<div class="card-body">' +

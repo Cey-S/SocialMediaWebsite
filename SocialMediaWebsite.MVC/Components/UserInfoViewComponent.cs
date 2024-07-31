@@ -14,8 +14,6 @@ namespace SocialMediaWebsite.MVC.Components
 			var user = await userManager.FindByNameAsync(User.Identity.Name);
 			var userRoles = await userManager.GetRolesAsync(user);
 
-			if (user.ImagePath != null) { }
-
 			UserInfoVM vm = new UserInfoVM()
 			{
 				ProfilePicture = user.ImagePath,

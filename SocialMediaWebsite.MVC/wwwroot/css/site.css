@@ -141,3 +141,12 @@ button.accept-policy {
     height: 40px;
     object-fit: cover;
 }
+
+.profile-link{
+    text-decoration: none;
+    color:inherit;
+}
+
+a.profile-link:hover{
+    color:inherit;
+}
