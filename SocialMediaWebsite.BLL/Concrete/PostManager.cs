@@ -30,5 +30,17 @@ namespace SocialMediaWebsite.BLL.Concrete
 
             return await _posts.OrderByDescending(p => p.CreateDate).Where(p => p.Id <= firstPostId).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).AsNoTracking().ToListAsync();
 		}
-    }
+
+		public async Task<List<Post>?> SkipAndTakeProfilePosts(int pageIndex, int pageSize, int firstPostId, string username)
+		{
+			if (pageIndex == 0)
+			{
+				// The first post Id can be stored on the client side
+				return await _posts.Where(p => p.MyUser.UserName.Equals(username)).OrderByDescending(p => p.CreateDate).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).AsNoTracking().ToListAsync();
+			}
+
+			return await _posts.Where(p => p.MyUser.UserName.Equals(username)).OrderByDescending(p => p.CreateDate).Where(p => p.Id <= firstPostId).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).AsNoTracking().ToListAsync();
+
+		}
+	}
 }

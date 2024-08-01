@@ -236,7 +236,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 
 			await signInManager.RefreshSignInAsync(user);
 
-			return RedirectToAction("Index", "Post");
+			return RedirectToAction("Profile");
 		}
 
 		public async Task<IActionResult> Profile(string? username)
@@ -252,7 +252,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 				return NotFound($"Unable to load user with username '{username}'.");
 			}
 
-			return View("Profile", username);
+			return View("Profile", user);
 		}
 	}
 }

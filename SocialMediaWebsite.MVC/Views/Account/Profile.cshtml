@@ -1,2 +1,147 @@
-﻿@model string
-<h1>@Model's Profile</h1>
+﻿@model MyUser
+<div class="row d-flex justify-content-center">
+	<div class="col col-lg-9 col-xl-8">
+		<div class="card">
+			<div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+				<div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+					<img src=@Model.ImagePath
+						 alt="profile picture" class="img-fluid img-thumbnail shadow mt-4 mb-3"
+						 style="width: 150px; min-height: 150px; object-fit:cover; z-index: 1">
+					@if (Model.UserName.Equals(User.Identity.Name))
+					{
+						<a asp-action="Settings" type="button" class="btn btn-outline-dark" style="z-index: 1;">
+							Edit profile
+						</a>
+					}
+					else
+					{
+						<button type="button" class="btn btn-outline-dark" style="z-index: 1;">
+							Follow
+						</button>
+					}
+				</div>
+				<div class="ms-3" style="margin-top: 130px;">
+					<h5>@Model.FirstName @Model.LastName</h5>
+					<p>@@@Model.UserName</p>
+				</div>
+			</div>
+			<div class="p-4 text-black bg-light">
+				<div class="d-flex justify-content-end text-center py-1 text-body">
+					<div>
+						<p class="mb-1 h5">@Model.PostCount</p>
+						<p class="small text-muted mb-0">Posts</p>
+					</div>
+					<div class="px-3">
+						<p class="mb-1 h5">@Model.FollowerCount</p>
+						<p class="small text-muted mb-0">Followers</p>
+					</div>
+					<div>
+						<p class="mb-1 h5">@Model.FollowingCount</p>
+						<p class="small text-muted mb-0">Following</p>
+					</div>
+				</div>
+			</div>
+			<div class="card-body p-4 text-black">
+				<div class="mb-5  text-body">
+					<p class="lead fw-normal mb-1">About</p>
+					<div class="p-4 bg-light">
+						<p class="font-italic mb-1">Web Developer</p>
+						<p class="font-italic mb-1">Lives in New York</p>
+						<p class="font-italic mb-0">Photographer</p>
+					</div>
+				</div>
+				<div class="d-flex justify-content-between align-items-center mb-4 text-body">
+					<p class="lead fw-normal mb-0">Posts</p>
+					<!--Liked-->
+					<!--Shared-->
+				</div>
+				<!--Posts Container-->
+				<div id="@Model.UserName-profile-container"></div>
+				<div id="progress" style="display:none">
+					<h4>Loading...</h4>
+				</div>
+				<div id="end" style="display:none">
+					<h4>There are no more posts...</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script type="text/javascript">
+
+		var pageSize = 5;
+		var pageIndex = 0;
+		var firstPostId = 0;
+		var isDataNull = false;
+		const containerId = $("[id*='profile-container']").attr("id");
+		const username = containerId.substring(0, containerId.indexOf("-"));
+
+		$(document).ready(function () {
+			GetData();
+
+			$(window).scroll(function () {
+				if (!isDataNull && $(window).scrollTop() ==
+					$(document).height() - $(window).height()) {
+					GetData();
+				}
+			});
+		});
+
+		function GetData() {
+			$.ajax({
+				type: 'GET',
+				url: '/api/Feed/GetProfileData',
+				data: { "pageindex": pageIndex, "pagesize": pageSize, "firstpostid": firstPostId, "username": username },
+				dataType: 'json',
+				success: function (data) {
+					if (data != null) {
+						console.log(data);
+
+						$.each(data, function (index, post) {
+							$("#" + containerId).append(
+								'<div id="' + post.PostId + '" class="card mb-5" style="max-width: 800px; ">' +
+								'<div class="card-header">' +
+								'<div class="d-flex align-items-center">' +
+								'<a href="/Account/Profile?username=' + post.Username + '" class="profile-link"><img src="' + post.ImagePath + '" class="profile-picture rounded-circle"/></a>' +
+								'<a href="/Account/Profile?username=' + post.Username + '" class="profile-link"><h6 class="card-subtitle ms-2">' + post.Username + '</h6></a>' +
+								'</div>' +
+								'</div>' +
+								'<div class="card-body">' +
+								'<h5 class="card-title">' + post.Title + '</h5>' +
+								'<p class="card-text" style="white-space: pre-wrap">' + post.Body + '</p>' +
+								'</div>' +
+								'<div class="card-footer" id="' + post.PostId + 'tags"></div>' +
+								'</div>');
+							var footerId = "#" + post.PostId + "tags";
+							$.each(post.PostTags, function (j, tag) {
+								$(footerId).append('<a href="#">#' + tag + '</a>');
+							});
+						});
+
+						if (pageIndex == 0) {
+							firstPostId = $("#profile-container div").first().attr("id");
+							console.log("First post id: " + firstPostId);
+						}
+
+						pageIndex++;
+					} else {
+						isDataNull = true;
+						console.log("data is null");
+						$("#end").show();
+					}
+				},
+				beforeSend: function () {
+					$("#progress").show();
+				},
+				complete: function () {
+					$("#progress").hide();
+				},
+				error: function () {
+					alert("Error while retrieving data!");
+				}
+			});
+		}
+	</script>
+}

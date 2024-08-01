@@ -19,7 +19,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 			this.postManager = postManager;
 		}
 
-
+		// Home Feed Posts
 		[HttpGet]
 		public async Task<ActionResult> GetData(int pageIndex, int pageSize, int firstPostId)
 		{
@@ -27,6 +27,39 @@ namespace SocialMediaWebsite.MVC.Controllers
 
 			var posts = await postManager.SkipAndTakePosts(pageIndex, pageSize, firstPostId);
 			
+			if (posts == null || posts.Count == 0)
+			{
+				return Ok(null);
+			}
+
+			posts.ForEach(p =>
+			{
+				List<string> postTags = new List<string>();
+				p.Tags.ForEach(t => { postTags.Add(t.TagName); });
+
+				postVMs.Add(new PostVM
+				{
+					PostId = p.Id,
+					Username = p.MyUser.UserName,
+					ImagePath = p.MyUser.ImagePath,
+					Title = p.Title,
+					Body = p.Body,
+					PostTags = postTags
+				});
+			});
+			var json = JsonConvert.SerializeObject(postVMs);
+
+			return Ok(json);
+		}
+
+		// User Profile Posts
+		[HttpGet]
+		public async Task<ActionResult> GetProfileData(int pageIndex, int pageSize, int firstPostId, string username)
+		{
+			List<PostVM> postVMs = new List<PostVM>();
+
+			var posts = await postManager.SkipAndTakeProfilePosts(pageIndex, pageSize, firstPostId, username);
+
 			if (posts == null || posts.Count == 0)
 			{
 				return Ok(null);

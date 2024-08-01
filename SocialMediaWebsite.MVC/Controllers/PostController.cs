@@ -95,6 +95,9 @@ namespace SocialMediaWebsite.MVC.Controllers
 				return View(vM);
 			}
 
+			user.PostCount++;
+			await userManager.UpdateAsync(user);
+
 			return RedirectToAction("Index");
 		}
 	}
