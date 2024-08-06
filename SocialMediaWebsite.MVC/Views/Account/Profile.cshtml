@@ -7,17 +7,23 @@
 					<img src=@Model.ImagePath
 						 alt="profile picture" class="img-fluid img-thumbnail shadow mt-4 mb-3"
 						 style="width: 150px; min-height: 150px; object-fit:cover; z-index: 1">
-					@if (Model.UserName.Equals(User.Identity.Name))
+					@if (ViewBag.isSignedInUser)
 					{
 						<a asp-action="Settings" type="button" class="btn btn-outline-dark" style="z-index: 1;">
 							Edit profile
 						</a>
 					}
+					else if (ViewBag.isFollowed)
+					{
+						<a asp-action="Unfollow" type="button" class="btn btn-outline-dark" style="z-index: 1;">
+							Unfollow
+						</a>
+					}
 					else
 					{
-						<button type="button" class="btn btn-outline-dark" style="z-index: 1;">
+						<a asp-action="Follow" asp-route-username="@Model.UserName" type="button" class="btn btn-outline-dark" style="z-index: 1;">
 							Follow
-						</button>
+						</a>
 					}
 				</div>
 				<div class="ms-3" style="margin-top: 130px;">

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaWebsite.Core.Entities;
+using SocialMediaWebsite.Entities.DbContexts;
 using SocialMediaWebsite.MVC.Models;
 
 namespace SocialMediaWebsite.MVC.Controllers
@@ -241,18 +242,71 @@ namespace SocialMediaWebsite.MVC.Controllers
 
 		public async Task<IActionResult> Profile(string? username)
 		{
-			if (username == null)
+			if (username == null || username.Equals(User.Identity.Name))
 			{
-				username = User.Identity.Name;
+				var signedInUser = await userManager.GetUserAsync(User);
+				if (signedInUser == null)
+				{
+					return NotFound($"Unable to load user with username '{username}'.");
+				}
+
+				ViewBag.isSignedInUser = true;
+				return View("Profile", signedInUser);
+			}
+			else
+			{
+				var user = await userManager.FindByNameAsync(username);
+				if (user == null)
+				{
+					return NotFound($"Unable to load user with username '{username}'.");
+				}
+
+				//var signedInUser = await userManager.GetUserAsync(User);
+				AppDbContext dbContext = new AppDbContext();
+				var signedInUser = await dbContext.Users.Where(p => p.UserName == User.Identity.Name).Include(p => p.Followings).AsNoTracking().FirstOrDefaultAsync();
+
+				if (signedInUser == null)
+				{
+					return NotFound($"Unable to load user with username '{username}'.");
+				}
+
+				ViewBag.isSignedInUser = false;
+				ViewBag.isFollowed = signedInUser.Followings.Any(p => p.UserName.Equals(username));
+				return View("Profile", user);
+			}
+		}
+
+		[Route("Account/Profile/{username}")]
+		public async Task<IActionResult> Follow(string username)
+		{
+			var user = await userManager.GetUserAsync(User);
+			if (user == null)
+			{
+				return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 			}
 
-			MyUser user = await userManager.FindByNameAsync(username);
-			if (user == null)
+			var userToFollow = await userManager.FindByNameAsync(username);
+			if (userToFollow == null)
 			{
 				return NotFound($"Unable to load user with username '{username}'.");
 			}
 
-			return View("Profile", user);
+			user.Followings.Add(userToFollow);
+			user.FollowingCount++;
+			var result1 = await userManager.UpdateAsync(user);
+			if (!result1.Succeeded)
+			{
+				return Content($"Could not follow user. {user.UserName} tried to follow {userToFollow.UserName}. {result1.Errors.First()}");
+			}
+
+			userToFollow.FollowerCount++;
+			var result2 = await userManager.UpdateAsync(userToFollow);
+			if (!result2.Succeeded)
+			{
+				return Content($"Could not follow user. {user.UserName} tried to follow {userToFollow.UserName}. {result2.Errors.First()}");
+			}
+
+			return RedirectToAction("Profile", routeValues: new { username });
 		}
 	}
 }
