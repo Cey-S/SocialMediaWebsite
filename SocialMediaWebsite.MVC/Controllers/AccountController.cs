@@ -10,7 +10,7 @@ using SocialMediaWebsite.MVC.Models;
 namespace SocialMediaWebsite.MVC.Controllers
 {
 	[Authorize(Roles = "AppUser")]
-	public class AccountController(UserManager<MyUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<MyUser> signInManager) : Controller
+	public class AccountController(UserManager<MyUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<MyUser> signInManager, AppDbContext dbContext) : Controller
 	{
 		[AllowAnonymous]
 		public IActionResult Register()
@@ -262,7 +262,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 				}
 
 				//var signedInUser = await userManager.GetUserAsync(User);
-				AppDbContext dbContext = new AppDbContext();
+				//AppDbContext dbContext = new AppDbContext();
 				var signedInUser = await dbContext.Users.Where(p => p.UserName == User.Identity.Name).Include(p => p.Followings).AsNoTracking().FirstOrDefaultAsync();
 
 				if (signedInUser == null)
@@ -276,7 +276,6 @@ namespace SocialMediaWebsite.MVC.Controllers
 			}
 		}
 
-		[Route("Account/Profile/{username}")]
 		public async Task<IActionResult> Follow(string username)
 		{
 			var user = await userManager.GetUserAsync(User);
@@ -304,6 +303,39 @@ namespace SocialMediaWebsite.MVC.Controllers
 			if (!result2.Succeeded)
 			{
 				return Content($"Could not follow user. {user.UserName} tried to follow {userToFollow.UserName}. {result2.Errors.First()}");
+			}
+
+			return RedirectToAction("Profile", routeValues: new { username });
+		}
+
+
+		public async Task<IActionResult> Unfollow(string username)
+		{
+			var user = await dbContext.Users.Where(p => p.UserName == User.Identity.Name).Include(p => p.Followings).FirstOrDefaultAsync();
+			if (user == null)
+			{
+				return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+			}
+
+			var userToUnfollow = await userManager.FindByNameAsync(username);
+			if (userToUnfollow == null)
+			{
+				return NotFound($"Unable to load user with username '{username}'.");
+			}
+
+			user.Followings.Remove(userToUnfollow);
+			user.FollowingCount--;
+			var result1 = await userManager.UpdateAsync(user);
+			if (!result1.Succeeded)
+			{
+				return Content($"Could not unfollow user. {user.UserName} tried to unfollow {userToUnfollow.UserName}. {result1.Errors.First()}");
+			}
+
+			userToUnfollow.FollowerCount--;
+			var result2 = await userManager.UpdateAsync(userToUnfollow);
+			if (!result2.Succeeded)
+			{
+				return Content($"Could not unfollow user. {user.UserName} tried to unfollow {userToUnfollow.UserName}. {result2.Errors.First()}");
 			}
 
 			return RedirectToAction("Profile", routeValues: new { username });

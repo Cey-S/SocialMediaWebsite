@@ -15,7 +15,7 @@
 					}
 					else if (ViewBag.isFollowed)
 					{
-						<a asp-action="Unfollow" type="button" class="btn btn-outline-dark" style="z-index: 1;">
+						<a asp-action="Unfollow" asp-route-username="@Model.UserName" type="button" class="btn btn-outline-dark" style="z-index: 1;">
 							Unfollow
 						</a>
 					}
