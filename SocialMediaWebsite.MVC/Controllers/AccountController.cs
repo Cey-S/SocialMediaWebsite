@@ -360,5 +360,23 @@ namespace SocialMediaWebsite.MVC.Controllers
 			ViewBag.profileOwner = username;
 			return View(followers);
 		}
+
+		public async Task<IActionResult> Followings(string username)
+		{		
+			// Select only the username and profile picture of the followings
+			var query = dbContext.Users
+				.AsNoTracking()
+				.Where(p => p.UserName == username)
+				.SelectMany(p => p.Followings,
+				(parent, child) => new FollowersVM()
+				{
+					Username = child.UserName,
+					ImagePath = child.ImagePath
+				});
+			var followings = await query.ToListAsync();
+
+			ViewBag.profileOwner = username;
+			return View(followings);
+		}
 	}
 }

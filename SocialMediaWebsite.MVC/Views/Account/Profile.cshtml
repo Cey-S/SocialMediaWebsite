@@ -41,10 +41,10 @@
 						<p class="mb-1 h5">@Model.FollowerCount</p>
 						<p class="small text-muted mb-0">Followers</p>
 					</a>
-					<div class="ps-3">
+					<a asp-action="Followings" asp-route-username="@Model.UserName" class="ps-3 text-decoration-none text-black">
 						<p class="mb-1 h5">@Model.FollowingCount</p>
 						<p class="small text-muted mb-0">Following</p>
-					</div>
+					</a>
 				</div>
 			</div>
 			<div class="card-body p-4 text-black">
