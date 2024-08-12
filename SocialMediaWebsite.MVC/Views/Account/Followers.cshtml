@@ -1,0 +1,27 @@
+﻿@model List<FollowersVM>
+
+<div class="container">
+	<div class="card" id="followers">
+		<div class="card-header">
+			<h3 class="card-title">
+				Followers
+			</h3>
+			<h6 class="card-subtitle text-muted">
+				of @ViewBag.profileOwner
+			</h6>
+		</div>
+		<div class="card-body">
+			<ul class="list-group list-group-flush">
+				@foreach (var follower in Model)
+				{
+					<li class="list-group-item">
+						<a asp-action="Profile" asp-route-username="@follower.Username" class="d-flex flex-row align-items-center text-decoration-none text-black p-2">
+							<img src="@follower.ImagePath" class="profile-picture rounded-circle" alt="profile picture" />
+							<h6 class="mb-0 ms-2 text-wrap w-75">@follower.Username</h6>
+						</a>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+</div>

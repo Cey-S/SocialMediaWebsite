@@ -308,7 +308,6 @@ namespace SocialMediaWebsite.MVC.Controllers
 			return RedirectToAction("Profile", routeValues: new { username });
 		}
 
-
 		public async Task<IActionResult> Unfollow(string username)
 		{
 			var user = await dbContext.Users.Where(p => p.UserName == User.Identity.Name).Include(p => p.Followings).FirstOrDefaultAsync();
@@ -339,6 +338,27 @@ namespace SocialMediaWebsite.MVC.Controllers
 			}
 
 			return RedirectToAction("Profile", routeValues: new { username });
+		}
+
+		public async Task<IActionResult> Followers(string username)
+		{
+			//var query2 = dbContext.Users.AsNoTracking().Where(p => p.UserName == User.Identity.Name).Select(p => p.Followers);
+			//var followers2 = await query2.FirstOrDefaultAsync();
+
+			// Select only the username and profile picture of the followers
+			var query = dbContext.Users
+				.AsNoTracking()
+				.Where(p => p.UserName == username)
+				.SelectMany(p => p.Followers,
+				(parent, child) => new FollowersVM()
+				{
+					Username = child.UserName,
+					ImagePath = child.ImagePath
+				});
+			var followers = await query.ToListAsync();
+
+			ViewBag.profileOwner = username;
+			return View(followers);
 		}
 	}
 }

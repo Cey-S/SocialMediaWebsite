@@ -37,11 +37,11 @@
 						<p class="mb-1 h5">@Model.PostCount</p>
 						<p class="small text-muted mb-0">Posts</p>
 					</div>
-					<div class="px-3">
+					<a asp-action="Followers" asp-route-username="@Model.UserName" class="ps-3 text-decoration-none text-black">
 						<p class="mb-1 h5">@Model.FollowerCount</p>
 						<p class="small text-muted mb-0">Followers</p>
-					</div>
-					<div>
+					</a>
+					<div class="ps-3">
 						<p class="mb-1 h5">@Model.FollowingCount</p>
 						<p class="small text-muted mb-0">Following</p>
 					</div>
