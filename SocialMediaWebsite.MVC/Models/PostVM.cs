@@ -10,5 +10,7 @@ namespace SocialMediaWebsite.MVC.Models
         public string Title { get; set; }
         public string Body { get; set; }
         public List<string> PostTags { get; set; } = new List<string>();
+        public bool isLiked { get; set; }
+        public int totalLikes { get; set; }
     }
 }

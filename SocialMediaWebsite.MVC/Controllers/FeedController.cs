@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SocialMediaWebsite.BLL.Abstract;
 using SocialMediaWebsite.Core.BusinessLogic;
+using SocialMediaWebsite.Core.Entities;
 using SocialMediaWebsite.Entities.DbContexts;
 using SocialMediaWebsite.Entities.Models;
 using SocialMediaWebsite.MVC.Models;
@@ -13,11 +15,13 @@ namespace SocialMediaWebsite.MVC.Controllers
 	public class FeedController : ControllerBase
 	{
 		private readonly IPostManager postManager;
+        private readonly UserManager<MyUser> userManager;
 
-		public FeedController(IPostManager postManager)
+        public FeedController(IPostManager postManager, UserManager<MyUser> userManager)
 		{
 			this.postManager = postManager;
-		}
+            this.userManager = userManager;
+        }
 
 		// Home Feed Posts
 		[HttpGet]
@@ -32,19 +36,26 @@ namespace SocialMediaWebsite.MVC.Controllers
 				return Ok(null);
 			}
 
+			var signedInUser = await userManager.GetUserAsync(User);
+
 			posts.ForEach(p =>
 			{
 				List<string> postTags = new List<string>();
 				p.Tags.ForEach(t => { postTags.Add(t.TagName); });
 
-				postVMs.Add(new PostVM
+                bool isLikedByUser = p.Interactions.Where(i => i.InteractionTypeId == 1 && i.MyUserId == signedInUser.Id).Any();
+				int totalLikes = p.Interactions.Where(i => i.InteractionTypeId == 1).Count();
+
+                postVMs.Add(new PostVM
 				{
 					PostId = p.Id,
 					Username = p.MyUser.UserName,
 					ImagePath = p.MyUser.ImagePath,
 					Title = p.Title,
 					Body = p.Body,
-					PostTags = postTags
+					PostTags = postTags,
+					isLiked = isLikedByUser,
+					totalLikes = totalLikes
 				});
 			});
 			var json = JsonConvert.SerializeObject(postVMs);
