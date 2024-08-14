@@ -37,5 +37,28 @@ namespace SocialMediaWebsite.MVC.Controllers
 
             return BadRequest();
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Unlike(int id, int likes) // remove like
+        {
+            var type = await typeManager.GetAsync(p => p.Name.Equals("Like"));
+            var user = await userManager.GetUserAsync(User);
+
+            var interaction = await interactionManager.GetAsync(p => p.InteractionType == type && p.MyUser == user && p.PostId == id);
+            if (interaction == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await interactionManager.DeleteAsync(interaction);
+            if (result > 0)
+            {
+                int newTotal = likes - 1;
+                var json = JsonConvert.SerializeObject(new { id, newTotal });
+                return Ok(json);
+            }
+
+            return BadRequest();
+        }
     }
 }
