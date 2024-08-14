@@ -46,7 +46,23 @@ namespace SocialMediaWebsite.MVC.Controllers
                 bool isLikedByUser = p.Interactions.Where(i => i.InteractionTypeId == 1 && i.MyUserId == signedInUser.Id).Any();
 				int totalLikes = p.Interactions.Where(i => i.InteractionTypeId == 1).Count();
 
-                postVMs.Add(new PostVM
+				List<CommentData> comments = new List<CommentData>();
+				int totalComments = p.Comments.Count;
+				if (totalComments > 0)
+				{
+					p.Comments.ForEach(c =>
+					{
+						CommentData commentData = new CommentData()
+						{
+							username = c.MyUser.UserName,
+							imagePath = c.MyUser.ImagePath,
+							content = c.Content
+						};
+						comments.Add(commentData);
+					});
+				}
+
+				postVMs.Add(new PostVM
 				{
 					PostId = p.Id,
 					Username = p.MyUser.UserName,
@@ -55,7 +71,9 @@ namespace SocialMediaWebsite.MVC.Controllers
 					Body = p.Body,
 					PostTags = postTags,
 					isLiked = isLikedByUser,
-					totalLikes = totalLikes
+					totalLikes = totalLikes,
+					totalComments = totalComments,
+					Comments = comments
 				});
 			});
 			var json = JsonConvert.SerializeObject(postVMs);

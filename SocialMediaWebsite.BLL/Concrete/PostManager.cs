@@ -25,10 +25,10 @@ namespace SocialMediaWebsite.BLL.Concrete
 			if (pageIndex == 0)
 			{
                 // The first post Id can be stored on the client side
-                return await _posts.OrderByDescending(p => p.CreateDate).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).Include(p => p.Interactions).AsNoTracking().ToListAsync();
+                return await _posts.OrderByDescending(p => p.CreateDate).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).Include(p => p.Interactions).Include(p => p.Comments).ThenInclude(c => c.MyUser).AsNoTracking().ToListAsync();
             }
 
-            return await _posts.OrderByDescending(p => p.CreateDate).Where(p => p.Id <= firstPostId).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).Include(p => p.Interactions).AsNoTracking().ToListAsync();
+            return await _posts.OrderByDescending(p => p.CreateDate).Where(p => p.Id <= firstPostId).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).Include(p => p.Interactions).Include(p => p.Comments).ThenInclude(c => c.MyUser).AsNoTracking().ToListAsync();
 		}
 
 		public async Task<List<Post>?> SkipAndTakeProfilePosts(int pageIndex, int pageSize, int firstPostId, string username)
