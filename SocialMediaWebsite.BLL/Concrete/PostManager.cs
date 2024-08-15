@@ -36,10 +36,28 @@ namespace SocialMediaWebsite.BLL.Concrete
 			if (pageIndex == 0)
 			{
 				// The first post Id can be stored on the client side
-				return await _posts.Where(p => p.MyUser.UserName.Equals(username)).OrderByDescending(p => p.CreateDate).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).AsNoTracking().ToListAsync();
+				return await _posts.AsNoTracking()
+					.Include(p => p.MyUser)
+					.Include(p => p.Comments).ThenInclude(c => c.MyUser)
+					.Include(p => p.Interactions)
+					.Include(p => p.Tags)
+					.Where(p => p.MyUser.UserName.Equals(username))
+					.OrderByDescending(p => p.CreateDate)
+					.Skip(pageIndex * pageSize)
+					.Take(pageSize)
+					.ToListAsync();
 			}
 
-			return await _posts.Where(p => p.MyUser.UserName.Equals(username)).OrderByDescending(p => p.CreateDate).Where(p => p.Id <= firstPostId).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).AsNoTracking().ToListAsync();
+			return await _posts.AsNoTracking()
+				.Include(p => p.MyUser)
+				.Include(p => p.Comments).ThenInclude(c => c.MyUser)
+				.Include(p => p.Interactions)
+				.Include(p => p.Tags)				
+				.Where(p => p.MyUser.UserName.Equals(username) && p.Id <= firstPostId)
+				.OrderByDescending(p => p.CreateDate)
+				.Skip(pageIndex * pageSize)
+				.Take(pageSize)
+				.ToListAsync();
 
 		}
 
