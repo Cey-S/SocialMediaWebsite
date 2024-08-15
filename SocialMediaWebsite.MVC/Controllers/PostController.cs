@@ -30,6 +30,11 @@ namespace SocialMediaWebsite.MVC.Controllers
 			return View();
 		}
 
+		public IActionResult TagSearch(string? name)
+		{
+			return View("TagSearch", name);
+		}
+
 		[HttpGet]
 		public async Task<IActionResult> Create()
 		{
@@ -84,7 +89,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 					{
 						Tag newTag = new Tag() { TagName = item };
 						post.Tags.Add(newTag);
-					}					
+					}
 				}
 			}
 

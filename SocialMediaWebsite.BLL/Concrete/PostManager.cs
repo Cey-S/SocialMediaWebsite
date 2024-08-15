@@ -42,5 +42,31 @@ namespace SocialMediaWebsite.BLL.Concrete
 			return await _posts.Where(p => p.MyUser.UserName.Equals(username)).OrderByDescending(p => p.CreateDate).Where(p => p.Id <= firstPostId).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).AsNoTracking().ToListAsync();
 
 		}
+
+		public async Task<List<Post>?> SkipAndTakePostsWithTag(int pageIndex, int pageSize, int firstPostId, string tag)
+		{
+			if (pageIndex == 0)
+			{
+				return await _posts.AsNoTracking()
+					.Include(p => p.MyUser)
+					.Include(p => p.Comments).ThenInclude(c => c.MyUser)
+					.Include(p => p.Interactions)
+					.Include(p => p.Tags)
+					.Where(p => p.Tags.Any(t => t.TagName == tag))
+					.OrderByDescending(p => p.CreateDate)
+					.Skip(pageIndex * pageSize).Take(pageSize)
+					.ToListAsync();
+			}
+
+			return await _posts.AsNoTracking()
+					.Include(p => p.MyUser)
+					.Include(p => p.Comments).ThenInclude(c => c.MyUser)
+					.Include(p => p.Interactions)
+					.Include(p => p.Tags)
+					.Where(p => p.Tags.Any(t => t.TagName == tag) && p.Id <= firstPostId)
+					.OrderByDescending(p => p.CreateDate)
+					.Skip(pageIndex * pageSize).Take(pageSize)
+					.ToListAsync();
+		}
 	}
 }

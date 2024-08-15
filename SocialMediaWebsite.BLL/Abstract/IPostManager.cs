@@ -13,5 +13,6 @@ namespace SocialMediaWebsite.BLL.Abstract
 	{
 		Task<List<Post>?> SkipAndTakePosts(int pageIndex, int pageSize, int firstPostId);
 		Task<List<Post>?> SkipAndTakeProfilePosts(int pageIndex, int pageSize, int firstPostId, string username);
+		Task<List<Post>?> SkipAndTakePostsWithTag(int pageIndex, int pageSize, int firstPostId, string tag);
 	}
 }
