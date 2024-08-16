@@ -1,0 +1,123 @@
+﻿@model SearchData
+<input id="indicator" type="hidden" value="@Model.Indicator" />
+<input id="searched-word" type="hidden" value="@Model.SearchedWord" />
+
+@if (Model.SearchedWord == null)
+{
+	<h4 class="mb-4 text-secondary">Please include '#' in your search for tags and '@@' in your search for accounts.</h4>
+	<h5 class="text-info">For example, try searching for #Nature, #Fun, @@Staff, @@ExampleAccount, etc.</h5>
+}
+else
+{
+	<h4 class="mb-4 text-secondary">Searched for <em class="text-info">@Model.Indicator@Model.SearchedWord</em></h4>
+}
+
+<div id="container"></div>
+<div id="progress" style="display:none">
+	<h4>Loading...</h4>
+</div>
+<div id="end" style="display:none">
+	<h4>There are no more search results...</h4>
+</div>
+
+@section Scripts {
+	<script type="text/javascript">
+		let pageSize = 10;
+		let pageIndex = 0;
+		let firstPostId = 0;
+		let isDataNull = false;
+
+		$(document).ready(function () {
+			if ($("#indicator").val() == '#') {
+				GetDataWithTag();
+
+				$(window).scroll(function () {
+					if (!isDataNull && $(window).scrollTop() ==
+						$(document).height() - $(window).height()) {
+						GetDataWithTag();
+					}
+				});
+			}
+			else if ($("#indicator").val() == '@@') {
+				GetAccountsWithUsername();
+
+				$(window).scroll(function () {
+					if (!isDataNull && $(window).scrollTop() ==
+						$(document).height() - $(window).height()) {
+						GetAccountsWithUsername();
+					}
+				});
+			}
+		});
+
+		function GetDataWithTag() {
+			$.ajax({
+				type: 'GET',
+				url: '/api/Feed/GetDataWithTag',
+				data: { "pageindex": pageIndex, "pagesize": pageSize, "firstpostid": firstPostId, "tag": $("#searched-word").val() },
+				dataType: 'json',
+				success: function (data) {
+					if (data != null) {
+						RenderPostComponent(data);
+
+						if (pageIndex == 0) {
+							firstPostId = $("#container div").first().attr("id");
+						}
+
+						pageIndex++;
+					} else {
+						isDataNull = true;
+						$("#end").show();
+					}
+				},
+				beforeSend: function () {
+					$("#progress").show();
+				},
+				complete: function () {
+					$("#progress").hide();
+				},
+				error: function () {
+					alert("Error while retrieving data!");
+				}
+			});
+		}
+
+		function GetAccountsWithUsername() {
+			$.ajax({
+				type: 'GET',
+				url: '/api/Feed/GetAccountsWithUsername',
+				data: { "pageindex": pageIndex, "pagesize": pageSize, "searchedword": $("#searched-word").val() },
+				dataType: 'json',
+				success: function (data) {
+					if (data != null) {
+						$("#container").append('<ul class="list-group list-group-flush"></ul>');
+						$.each(data, function (index, account) {
+							$("#container ul").append(
+								'<li class="list-group-item">' +
+									'<a href="/Account/Profile?username=' + account.Username + '" class="d-flex flex-row align-items-center text-decoration-none text-black p-3">' +
+										'<img src="' + account.ImagePath + '" class="profile-picture rounded-circle" alt="profile picture" />' +
+										'<h6 class="mb-0 ms-2 text-wrap w-75">'+ account.Username + '</h6>' +
+									'</a>' +
+								'</li>'
+							);
+						});
+
+						pageIndex++;
+					} else {
+						isDataNull = true;
+						$("#end").show();
+					}
+				},
+				beforeSend: function () {
+					$("#progress").show();
+				},
+				complete: function () {
+					$("#progress").hide();
+				},
+				error: function () {
+					alert("Error while retrieving data!");
+				}
+			});
+		}
+	</script>
+}

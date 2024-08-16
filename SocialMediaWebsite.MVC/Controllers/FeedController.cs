@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SocialMediaWebsite.BLL.Abstract;
 using SocialMediaWebsite.Core.BusinessLogic;
@@ -15,20 +16,20 @@ namespace SocialMediaWebsite.MVC.Controllers
 	public class FeedController : ControllerBase
 	{
 		private readonly IPostManager postManager;
-        private readonly UserManager<MyUser> userManager;
+		private readonly UserManager<MyUser> userManager;
 
-        public FeedController(IPostManager postManager, UserManager<MyUser> userManager)
+		public FeedController(IPostManager postManager, UserManager<MyUser> userManager)
 		{
 			this.postManager = postManager;
-            this.userManager = userManager;
-        }
+			this.userManager = userManager;
+		}
 
 		// Home Feed Posts
 		[HttpGet]
 		public async Task<ActionResult> GetData(int pageIndex, int pageSize, int firstPostId)
 		{
 			var posts = await postManager.SkipAndTakePosts(pageIndex, pageSize, firstPostId);
-			
+
 			if (posts == null || posts.Count == 0)
 			{
 				return Ok(null);
@@ -65,6 +66,39 @@ namespace SocialMediaWebsite.MVC.Controllers
 			}
 
 			var json = await ConvertPostsToJsonAsync(posts);
+			return Ok(json);
+		}
+
+		// Accounts that contain the searched word in their name
+		[HttpGet]
+		public async Task<ActionResult> GetAccountsWithUsername(int pageIndex, int pageSize, string searchedWord)
+		{
+			var accountList = await userManager.Users.AsNoTracking()
+									 .Where(p => p.UserName.Contains(searchedWord))
+									 .OrderBy(p => p.UserName)
+									 .Skip(pageIndex * pageSize)
+									 .Take(pageSize)
+									 .ToListAsync();
+
+			if (accountList == null || accountList.Count == 0)
+			{
+				return Ok(null);
+			}
+
+			var match = accountList.Find(p => p.UserName.ToLower() == searchedWord.ToLower());
+			if (match != null)
+			{
+				accountList.Remove(match);
+				accountList.Insert(0, match); // Move the exact match to the top of the list
+			}
+
+			List<FollowersVM> accountVMs = new List<FollowersVM>();
+			accountList.ForEach(a =>
+			{
+				accountVMs.Add(new FollowersVM { ImagePath = a.ImagePath, Username = a.UserName });
+			});
+
+			var json = JsonConvert.SerializeObject(accountVMs);
 			return Ok(json);
 		}
 
