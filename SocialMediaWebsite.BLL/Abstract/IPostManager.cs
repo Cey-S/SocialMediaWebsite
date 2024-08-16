@@ -12,6 +12,8 @@ namespace SocialMediaWebsite.BLL.Abstract
 	public interface IPostManager : IManager<AppDbContext, Post>
 	{
 		Task<List<Post>?> SkipAndTakePosts(int pageIndex, int pageSize, int firstPostId);
+		Task<List<Post>?> SkipAndTakePopularPosts(int pageIndex, int pageSize);
+		Task<List<Post>?> SkipAndTakeFollowingPosts(int pageIndex, int pageSize, int firstPostId, string username);
 		Task<List<Post>?> SkipAndTakeProfilePosts(int pageIndex, int pageSize, int firstPostId, string username);
 		Task<List<Post>?> SkipAndTakePostsWithTag(int pageIndex, int pageSize, int firstPostId, string tag);
 	}

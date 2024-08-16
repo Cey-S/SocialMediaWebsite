@@ -1,59 +1,154 @@
-﻿<div id="container"></div>
-<div id="progress" style="display:none">
-    <h4>Loading...</h4>
-</div>
-<div id="end" style="display:none">
-    <h4>There are no more posts...</h4>
+﻿<div class="container mt-2">
+	<div class="row text-center">
+		<div class="col-lg-8 col-sm-12 mb-4">
+			<ul id="home-feed-tabs" class="nav nav-justified">
+				<li class="nav-item">
+					<a id="following" class="nav-link selected-tab" href="#" onclick="ChangeTab(this);return false;">Following</a>
+				</li>
+				<li class="nav-item">
+					<a id="latest" class="nav-link" href="#" onclick="ChangeTab(this);return false;">Latest</a>
+				</li>
+				<li class="nav-item">
+					<a id="popular" class="nav-link" href="#" onclick="ChangeTab(this);return false;">Popular</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-8 col-sm-12">
+			<div id="container"></div>
+			<div id="progress" style="display:none">
+				<h4>Loading...</h4>
+			</div>
+			<div id="end" style="display:none">
+				<h4>There are no more posts...</h4>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="position-fixed w-25" style="max-width: 400px;">
+				<div class="card border-0 shadow-sm">
+					<div class="card-header">
+						<h4 class="card-title">Popular Topics</h4>
+						<p class="card-subtitle text-secondary">Check out these trending topics!</p>
+					</div>
+					<div class="card-body">
+						<p>#Tag</p>
+						<p>#Tag</p>
+						<p>#Tag</p>
+						<p>#Tag</p>
+						<p>#Tag</p>
+					</div>
+				</div>
+				<div class="card border-0 shadow-sm mt-3">
+					<div class="card-header">
+						<h4 class="card-title">Popular Accounts</h4>
+						<p class="card-subtitle text-secondary">Popular accounts you can follow:</p>
+					</div>
+					<div class="card-body">
+						<p>@@Username</p>
+						<p>@@Username</p>
+						<p>@@Username</p>
+						<p>@@Username</p>
+						<p>@@Username</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
-        let pageSize = 5;
-        let pageIndex = 0;
-        let firstPostId = 0;
-        let isDataNull = false;
+	<script type="text/javascript">
+		let pageSize = 5;
+		let pageIndex = 0;
+		let firstPostId = 0;
+		let isDataNull = false;
 
-        $(document).ready(function () {
-            GetData();
+		let currentTab = "following";
+		let url = "/api/Feed/GetFollowingData";
 
-            $(window).scroll(function () {
-                if (!isDataNull && $(window).scrollTop() ==
-                    $(document).height() - $(window).height()) {
-                    GetData();
-                }
-            });
-        });
+		$(document).ready(function () {
+			SetPage();
+		});
 
-        function GetData() {
-            $.ajax({
-                type: 'GET',
-                url: '/api/Feed/GetData',
-                data: { "pageindex": pageIndex, "pagesize": pageSize, "firstpostid": firstPostId },
-                dataType: 'json',
-                success: function (data) {
-                    if (data != null) {
-                        RenderPostComponent(data);                        
+		function ChangeTab(element) {
+			let tab = $(element).attr("id");
+			if (currentTab === tab) {
+				return;
+			}
 
-                        if (pageIndex == 0) {
-                            firstPostId = $("#container div").first().attr("id");
-                        }
+			$("#" + currentTab).removeClass("selected-tab");
+			$("#" + tab).addClass("selected-tab");
+			currentTab = tab;
 
-                        pageIndex++;
-                    } else {
-                        isDataNull = true;
-                        $("#end").show();
-                    }
-                },
-                beforeSend: function () {
-                    $("#progress").show();
-                },
-                complete: function () {
-                    $("#progress").hide();
-                },
-                error: function () {
-                    alert("Error while retrieving data!");
-                }
-            });
-        }        
-    </script>
+			ClearContainer();
+
+			switch (tab) {
+				case "following":
+					url = "/api/Feed/GetFollowingData";
+					break;
+				case "latest":
+					url = "/api/Feed/GetLatestData";
+					break;
+				case "popular":
+					url = "/api/Feed/GetPopularData";
+					break;
+				default:
+				// code block
+			}
+
+			SetPage();
+		}
+
+		function SetPage() {
+			GetData(url);
+
+			$(window).scroll(function () {
+				if (!isDataNull && $(window).scrollTop() ==
+					$(document).height() - $(window).height()) {
+					GetData(url);
+				}
+			});
+		}
+
+		function ClearContainer() {
+			$("#container").html("");
+			pageIndex = 0;
+			firstPostId = 0;
+			isDataNull = false;
+		}
+
+		function GetData(url) {
+			$.ajax({
+				type: 'GET',
+				url: url,
+				data: { "pageindex": pageIndex, "pagesize": pageSize, "firstpostid": firstPostId },
+				dataType: 'json',
+				success: function (data) {
+					if (data != null) {
+						console.log(data);
+						RenderPostComponent(data);
+
+						if (pageIndex == 0) {
+							firstPostId = $("#container div").first().attr("id");
+						}
+
+						pageIndex++;
+					} else {
+						isDataNull = true;
+						$("#end").show();
+					}
+				},
+				beforeSend: function () {
+					$("#progress").show();
+				},
+				complete: function () {
+					$("#progress").hide();
+				},
+				error: function () {
+					alert("Error while retrieving data!");
+				}
+			});
+		}
+	</script>
 }

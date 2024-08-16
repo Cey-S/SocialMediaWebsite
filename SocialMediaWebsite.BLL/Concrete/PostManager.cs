@@ -24,11 +24,52 @@ namespace SocialMediaWebsite.BLL.Concrete
 		{
 			if (pageIndex == 0)
 			{
-                // The first post Id can be stored on the client side
-                return await _posts.OrderByDescending(p => p.CreateDate).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).Include(p => p.Interactions).Include(p => p.Comments).ThenInclude(c => c.MyUser).AsNoTracking().ToListAsync();
-            }
+				// The first post Id can be stored on the client side
+				return await _posts.OrderByDescending(p => p.CreateDate).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).Include(p => p.Interactions).Include(p => p.Comments).ThenInclude(c => c.MyUser).AsNoTracking().ToListAsync();
+			}
 
-            return await _posts.OrderByDescending(p => p.CreateDate).Where(p => p.Id <= firstPostId).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).Include(p => p.Interactions).Include(p => p.Comments).ThenInclude(c => c.MyUser).AsNoTracking().ToListAsync();
+			return await _posts.OrderByDescending(p => p.CreateDate).Where(p => p.Id <= firstPostId).Skip(pageIndex * pageSize).Take(pageSize).Include(p => p.MyUser).Include(p => p.Tags).Include(p => p.Interactions).Include(p => p.Comments).ThenInclude(c => c.MyUser).AsNoTracking().ToListAsync();
+		}
+
+		public async Task<List<Post>?> SkipAndTakePopularPosts(int pageIndex, int pageSize)
+		{
+			return await _posts.AsNoTracking()
+				.Include(p => p.Comments)
+				.ThenInclude(c => c.MyUser)
+				.Include(p => p.MyUser)
+				.Include(p => p.Tags)
+				.Include(p => p.Interactions)
+				.OrderByDescending(p => p.Interactions.Count).ThenByDescending(p => p.Comments.Count).ThenBy(p => p.MyUser.UserName)
+				.Skip(pageIndex * pageSize).Take(pageSize)
+				.ToListAsync();
+		}
+
+		public async Task<List<Post>?> SkipAndTakeFollowingPosts(int pageIndex, int pageSize, int firstPostId, string username)
+		{
+			if (pageIndex == 0)
+			{
+				return await _posts.AsNoTracking()
+					.Include(p => p.Comments)
+					.ThenInclude(c => c.MyUser)
+					.Include(p => p.MyUser)
+					.Include(p => p.Tags)
+					.Include(p => p.Interactions)
+					.Where(p => p.MyUser.Followers.Any(u => u.UserName == username))
+					.OrderByDescending(p => p.CreateDate)
+					.Skip(pageIndex * pageSize).Take(pageSize)
+					.ToListAsync();
+			}
+
+			return await _posts.AsNoTracking()
+					.Include(p => p.Comments)
+					.ThenInclude(c => c.MyUser)
+					.Include(p => p.MyUser)
+					.Include(p => p.Tags)
+					.Include(p => p.Interactions)
+					.Where(p => p.MyUser.Followers.Any(u => u.UserName == username) && p.Id <= firstPostId)
+					.OrderByDescending(p => p.CreateDate)
+					.Skip(pageIndex * pageSize).Take(pageSize)
+					.ToListAsync();
 		}
 
 		public async Task<List<Post>?> SkipAndTakeProfilePosts(int pageIndex, int pageSize, int firstPostId, string username)
@@ -52,7 +93,7 @@ namespace SocialMediaWebsite.BLL.Concrete
 				.Include(p => p.MyUser)
 				.Include(p => p.Comments).ThenInclude(c => c.MyUser)
 				.Include(p => p.Interactions)
-				.Include(p => p.Tags)				
+				.Include(p => p.Tags)
 				.Where(p => p.MyUser.UserName.Equals(username) && p.Id <= firstPostId)
 				.OrderByDescending(p => p.CreateDate)
 				.Skip(pageIndex * pageSize)

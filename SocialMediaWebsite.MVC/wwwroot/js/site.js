@@ -5,7 +5,7 @@
 function RenderPostComponent(data) {
     $.each(data, function (index, post) {
         $("#container").append(
-            '<div id="' + post.PostId + '" class="card text-break border-0 shadow mb-5" style="max-width: 800px; ">' +
+            '<div id="' + post.PostId + '" class="card text-break border-0 shadow mb-5 ms-auto me-auto" style="max-width: 880px;">' +
                 // Card Header: Profile Picture, Username
                 '<div class="card-header">' +
                     '<div class="d-flex align-items-center">' +

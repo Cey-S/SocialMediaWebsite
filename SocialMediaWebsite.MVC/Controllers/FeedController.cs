@@ -24,11 +24,41 @@ namespace SocialMediaWebsite.MVC.Controllers
 			this.userManager = userManager;
 		}
 
-		// Home Feed Posts
+		// Home Feed Posts: Latest, All posts order by descending
 		[HttpGet]
-		public async Task<ActionResult> GetData(int pageIndex, int pageSize, int firstPostId)
+		public async Task<ActionResult> GetLatestData(int pageIndex, int pageSize, int firstPostId)
 		{
 			var posts = await postManager.SkipAndTakePosts(pageIndex, pageSize, firstPostId);
+
+			if (posts == null || posts.Count == 0)
+			{
+				return Ok(null);
+			}
+
+			var json = await ConvertPostsToJsonAsync(posts);
+			return Ok(json);
+		}
+
+		// Home Feed Posts: Popular, All posts ordered by interaction counts
+		[HttpGet]
+		public async Task<ActionResult> GetPopularData(int pageIndex, int pageSize, int firstPostId)
+		{
+			var posts = await postManager.SkipAndTakePopularPosts(pageIndex, pageSize);
+
+			if (posts == null || posts.Count == 0)
+			{
+				return Ok(null);
+			}
+
+			var json = await ConvertPostsToJsonAsync(posts);
+			return Ok(json);
+		}
+
+		// Home Feed Posts: Following, Posts made by accounts the logged-in user follows
+		[HttpGet]
+		public async Task<ActionResult> GetFollowingData(int pageIndex, int pageSize, int firstPostId)
+		{
+			var posts = await postManager.SkipAndTakeFollowingPosts(pageIndex, pageSize, firstPostId, User.Identity.Name);
 
 			if (posts == null || posts.Count == 0)
 			{
