@@ -2,9 +2,10 @@
 
 namespace SocialMediaWebsite.MVC.Models
 {
-    public class PostVM
+	public class PostVM
     {
         public int PostId { get; set; }
+        public string CreateDate { get; set; }
         public string Username { get; set; }
         public string ImagePath { get; set; }
         public string Title { get; set; }
@@ -14,12 +15,5 @@ namespace SocialMediaWebsite.MVC.Models
         public int totalLikes { get; set; }
         public int totalComments { get; set; }
         public List<CommentData>? Comments { get; set; }
-    }
-
-    public struct CommentData
-    {
-        public string imagePath { get; set; }
-        public string username { get; set; }
-        public string content { get; set; }
     }
 }

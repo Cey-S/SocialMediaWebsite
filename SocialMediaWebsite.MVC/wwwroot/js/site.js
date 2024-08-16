@@ -36,7 +36,9 @@ function RenderPostComponent(data) {
                     '<span class="card-link">' +
                         '<a class="card-link" href="#"><svg style="max-width: 23px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M272 416c17.7 0 32-14.3 32-32s-14.3-32-32-32l-112 0c-17.7 0-32-14.3-32-32l0-128 32 0c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-64-64c-12.5-12.5-32.8-12.5-45.3 0l-64 64c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8l32 0 0 128c0 53 43 96 96 96l112 0zM304 96c-17.7 0-32 14.3-32 32s14.3 32 32 32l112 0c17.7 0 32 14.3 32 32l0 128-32 0c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l64 64c12.5 12.5 32.8 12.5 45.3 0l64-64c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8l-32 0 0-128c0-53-43-96-96-96L304 96z"/></svg></a>' +
                         '<span class="ms-1 fw-bold">0</span>' +
-                    '</span>' +
+                    '</span>' + 
+                    // Create Date
+                    '<span class="float-end text-secondary">' + post.CreateDate + '</span>' +
                 '</div>' +
                 // Collapsable Comments: Comment writing textarea, User Comments
                 '<div class="collapse" id="collapsable' + post.PostId + '">' +
@@ -71,9 +73,12 @@ function RenderPostComponent(data) {
                 $("#" + post.PostId + "comments").append(
                     '<div class="card text-break mb-3">' +
                         '<div class="card-body bg-light">' +
-                            '<div class="card-title d-flex align-items-center">' +
-                                '<a href="/Account/Profile?username=' + commentData.username + '" class="profile-link"><img src="' + commentData.imagePath + '" class="profile-picture rounded-circle" style="max-width: 30px; max-height:30px"/></a>' +
-                                '<a href="/Account/Profile?username=' + commentData.username + '" class="profile-link"><h6 class="card-subtitle ms-2">' + commentData.username + '</h6></a>' +
+                            '<div class="d-flex align-items-start justify-content-between gap-3">'+
+                                '<div class="card-title d-flex align-items-center">' +
+                                    '<a href="/Account/Profile?username=' + commentData.username + '" class="profile-link"><img src="' + commentData.imagePath + '" class="profile-picture rounded-circle" style="max-width: 30px; max-height:30px"/></a>' +
+                                    '<a href="/Account/Profile?username=' + commentData.username + '" class="profile-link"><h6 class="card-subtitle ms-2">' + commentData.username + '</h6></a>' +
+                                '</div>' +
+                                '<span class="text-secondary">' + commentData.CreateDate + '</span>' +
                             '</div>' +
                             '<p class="card-text" style="white-space: pre-wrap">' + commentData.content + '</p>' +
                         '</div>' +
@@ -145,9 +150,12 @@ function SendComment(postId) {
             $("#" + data.id + "comments").append(
                 '<div class="card text-break mb-3">' +
                 '<div class="card-body bg-light">' +
+                '<div class="d-flex align-items-start justify-content-between gap-3">' +
                 '<div class="card-title d-flex align-items-center">' +
                 '<a href="/Account/Profile?username=' + data.username + '" class="profile-link"><img src="' + data.imagePath + '" class="profile-picture rounded-circle" style="max-width: 30px; max-height:30px"/></a>' +
                 '<a href="/Account/Profile?username=' + data.username + '" class="profile-link"><h6 class="card-subtitle ms-2">' + data.username + '</h6></a>' +
+                '</div>' +
+                '<span class="text-secondary">' + data.createTime + '</span>' +
                 '</div>' +
                 '<p class="card-text" style="white-space: pre-wrap">' + data.content + '</p>' +
                 '</div>' +

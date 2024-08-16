@@ -126,7 +126,8 @@ namespace SocialMediaWebsite.MVC.Controllers
 						{
 							username = c.MyUser.UserName,
 							imagePath = c.MyUser.ImagePath,
-							content = c.Content
+							content = c.Content,
+							CreateDate = c.CreateDate.ToLocalTime().ToString("MMM d, yyyy - H:mm")
 						};
 						comments.Add(commentData);
 					});
@@ -135,6 +136,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 				postVMs.Add(new PostVM
 				{
 					PostId = p.Id,
+					CreateDate = p.CreateDate.ToLocalTime().ToString("MMM d, yyyy - H:mm"),
 					Username = p.MyUser.UserName,
 					ImagePath = p.MyUser.ImagePath,
 					Title = p.Title,

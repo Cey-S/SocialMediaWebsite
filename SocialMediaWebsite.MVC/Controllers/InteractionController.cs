@@ -80,7 +80,7 @@ namespace SocialMediaWebsite.MVC.Controllers
             if (result > 0)
             {
                 int newTotal = comments + 1;
-                var json = JsonConvert.SerializeObject(new { id, newTotal, content, username = user.UserName, imagePath = user.ImagePath });
+                var json = JsonConvert.SerializeObject(new { id, newTotal, content, username = user.UserName, imagePath = user.ImagePath, createTime = DateTime.Now.ToString("MMM d, yyyy - H:mm") });
                 return Ok(json);
             }
             return BadRequest();
