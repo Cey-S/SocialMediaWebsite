@@ -24,7 +24,7 @@
 				<h4>There are no more posts...</h4>
 			</div>
 		</div>
-		<div class="col-lg-4">
+		<div class="col-lg-4 d-none d-lg-block">
 			<div class="position-fixed w-25" style="max-width: 400px;">
 				<div class="card border-0 shadow-sm">
 					<div class="card-header">
@@ -126,7 +126,6 @@
 				dataType: 'json',
 				success: function (data) {
 					if (data != null) {
-						console.log(data);
 						RenderPostComponent(data);
 
 						if (pageIndex == 0) {
