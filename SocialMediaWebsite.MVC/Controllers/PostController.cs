@@ -16,9 +16,9 @@ namespace SocialMediaWebsite.MVC.Controllers
 	{
 		private readonly IPostManager postManager;
 		private readonly UserManager<MyUser> userManager;
-		private readonly IManager<AppDbContext, Tag> tagManager;
+		private readonly ITagManager tagManager;
 
-		public PostController(IPostManager postManager, UserManager<MyUser> userManager, IManager<AppDbContext, Tag> tagManager)
+		public PostController(IPostManager postManager, UserManager<MyUser> userManager, ITagManager tagManager)
 		{
 			this.postManager = postManager;
 			this.userManager = userManager;
@@ -27,6 +27,8 @@ namespace SocialMediaWebsite.MVC.Controllers
 
 		public IActionResult Index()
 		{
+			var popularTags = tagManager.GetPopularTagCountsAsync();
+			ViewBag.PopularTags = popularTags;
 			return View();
 		}
 

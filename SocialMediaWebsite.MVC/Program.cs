@@ -21,6 +21,7 @@ namespace SocialMediaWebsite.MVC
 
             builder.Services.AddScoped(typeof(IManager<,>), typeof(Manager<,>));
             builder.Services.AddScoped<IPostManager, PostManager>();
+            builder.Services.AddScoped<ITagManager, TagManager>();
 
             builder.Services.AddIdentity<MyUser, IdentityRole>(options =>
 			{

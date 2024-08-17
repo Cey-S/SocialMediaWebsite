@@ -32,11 +32,17 @@
 						<p class="card-subtitle text-secondary">Check out these trending topics!</p>
 					</div>
 					<div class="card-body">
-						<p>#Tag</p>
-						<p>#Tag</p>
-						<p>#Tag</p>
-						<p>#Tag</p>
-						<p>#Tag</p>
+						<div class="row text-center">
+							<span class="col-6 fw-bold">Tag Name</span>
+							<span class="col-6 fw-bold">Count</span>
+						</div>
+						@foreach (var TagCountPair in ViewBag.PopularTags)
+						{
+							<div class="row text-center">
+								<span class="col-6"><a class="text-decoration-none text-info" asp-action="TagSearch" asp-route-name="@TagCountPair.Key">#@TagCountPair.Key</a></span>
+								<span class="col-6">@TagCountPair.Value</span>
+							</div>
+						}
 					</div>
 				</div>
 				<div class="card border-0 shadow-sm mt-3">
