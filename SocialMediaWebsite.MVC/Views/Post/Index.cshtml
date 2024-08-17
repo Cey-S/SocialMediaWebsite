@@ -39,7 +39,7 @@
 						@foreach (var TagCountPair in ViewBag.PopularTags)
 						{
 							<div class="row text-center">
-								<span class="col-6"><a class="text-decoration-none text-info" asp-action="TagSearch" asp-route-name="@TagCountPair.Key">#@TagCountPair.Key</a></span>
+								<span class="col-6 text-truncate"><a class="text-decoration-none text-info" asp-action="TagSearch" asp-route-name="@TagCountPair.Key">#@TagCountPair.Key</a></span>
 								<span class="col-6">@TagCountPair.Value</span>
 							</div>
 						}
@@ -51,11 +51,17 @@
 						<p class="card-subtitle text-secondary">Popular accounts you can follow:</p>
 					</div>
 					<div class="card-body">
-						<p>@@Username</p>
-						<p>@@Username</p>
-						<p>@@Username</p>
-						<p>@@Username</p>
-						<p>@@Username</p>
+						<div class="row text-center">
+							<span class="col-6 fw-bold">Username</span>
+							<span class="col-6 fw-bold">Follower Count</span>
+						</div>
+						@foreach (var UsernameCountPair in ViewBag.PopularAccounts)
+						{
+							<div class="row text-center">
+								<span class="col-6 text-truncate"><a class="text-decoration-none text-info" asp-controller="Account" asp-action="Profile" asp-route-username="@UsernameCountPair.Key">@@@UsernameCountPair.Key</a></span>
+								<span class="col-6">@UsernameCountPair.Value</span>
+							</div>
+						}
 					</div>
 				</div>
 			</div>

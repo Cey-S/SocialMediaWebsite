@@ -20,7 +20,7 @@ namespace SocialMediaWebsite.BLL.Concrete
 			_tags = context.Set<Tag>();
 		}
 
-		public Dictionary<string, int>? GetPopularTagCountsAsync()
+		public Dictionary<string, int>? GetPopularTagCounts()
 		{
 			return context.Tags
 				.Include(t => t.Posts)  // Include related Posts

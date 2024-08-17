@@ -11,6 +11,6 @@ namespace SocialMediaWebsite.BLL.Abstract
 {
 	public interface ITagManager : IManager<AppDbContext, Tag>
 	{
-		Dictionary<string, int>? GetPopularTagCountsAsync();
+		Dictionary<string, int>? GetPopularTagCounts();
 	}
 }

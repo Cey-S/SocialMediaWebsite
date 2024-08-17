@@ -27,8 +27,23 @@ namespace SocialMediaWebsite.MVC.Controllers
 
 		public IActionResult Index()
 		{
-			var popularTags = tagManager.GetPopularTagCountsAsync();
+			var popularTags = tagManager.GetPopularTagCounts();
 			ViewBag.PopularTags = popularTags;
+
+			var popularAccounts = userManager.Users
+				.Include(p => p.Followers)
+				.AsEnumerable()
+				.GroupBy(p => p.UserName)
+				.Select(g => new
+				{
+					Username = g.Key == null ? "Error in Getting Username" : g.Key,
+					FollowerCount = g.Sum(p => p.Followers.Count)
+				})
+				.OrderByDescending(x => x.FollowerCount)
+				.Take(5)
+				.ToDictionary(x => x.Username, x => x.FollowerCount);
+			ViewBag.PopularAccounts = popularAccounts;
+
 			return View();
 		}
 
