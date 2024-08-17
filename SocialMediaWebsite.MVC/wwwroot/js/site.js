@@ -4,6 +4,11 @@
 // Write your JavaScript code.
 function RenderPostComponent(data) {
     $.each(data, function (index, post) {
+        if ($("#" + post.PostId).length) {
+            // If this post is already displayed on the page, skip to rendering next.
+            // Temporary fix for the popular posts tab. Simultaneous interactions break the order.
+            return true; 
+        }
         $("#container").append(
             '<div id="' + post.PostId + '" class="card text-break border-0 shadow mb-5 ms-auto me-auto" style="max-width: 880px;">' +
                 // Card Header: Profile Picture, Username
