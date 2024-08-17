@@ -15,5 +15,7 @@ namespace SocialMediaWebsite.MVC.Models
         public int totalLikes { get; set; }
         public int totalComments { get; set; }
         public List<CommentData>? Comments { get; set; }
+        public bool isReposted { get; set; }
+        public int totalReposts { get; set; }
     }
 }

@@ -146,6 +146,9 @@ namespace SocialMediaWebsite.MVC.Controllers
 				bool isLikedByUser = p.Interactions.Where(i => i.InteractionTypeId == 1 && i.MyUserId == signedInUser.Id).Any();
 				int totalLikes = p.Interactions.Where(i => i.InteractionTypeId == 1).Count();
 
+				bool isRepostedByUser = p.Interactions.Where(i => i.InteractionTypeId == 2 && i.MyUserId == signedInUser.Id).Any();
+				int totalReposts = p.Interactions.Where(i => i.InteractionTypeId == 2).Count();
+
 				List<CommentData> comments = new List<CommentData>();
 				int totalComments = p.Comments.Count;
 				if (totalComments > 0)
@@ -175,7 +178,9 @@ namespace SocialMediaWebsite.MVC.Controllers
 					isLiked = isLikedByUser,
 					totalLikes = totalLikes,
 					totalComments = totalComments,
-					Comments = comments
+					Comments = comments,
+					isReposted = isRepostedByUser,
+					totalReposts = totalReposts
 				});
 			});
 			var json = JsonConvert.SerializeObject(postVMs);
