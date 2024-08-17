@@ -151,12 +151,12 @@ a.profile-link:hover {
     color: inherit;
 }
 
-.selected-tab{
+.selected-tab {
     font-weight: bold;
     border-bottom: 1px solid black;
 }
 
-#home-feed-tabs a {
+.feed-tabs a {
     display: block;
     position: relative;
     padding: 0.2em 0;
@@ -167,7 +167,15 @@ a.profile-link:hover {
     color: black;
 }
 
-    #home-feed-tabs a::after {
+    .feed-tabs a:hover {
+        color: black;
+    }
+
+    .feed-tabs a:focus{
+        color: black;
+    }
+
+    .feed-tabs a::after {
         content: '';
         position: absolute;
         bottom: 0;
@@ -180,8 +188,8 @@ a.profile-link:hover {
         transform: translate3d(-100%, 0, 0);
     }
 
-    #home-feed-tabs a:not(.selected-tab):hover::after,
-    #home-feed-tabs a:focus::after {
+    .feed-tabs a:not(.selected-tab):hover::after,
+    .feed-tabs a:focus::after {
         opacity: 1;
         transform: translate3d(0, 0, 0);
     }

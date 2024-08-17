@@ -99,7 +99,20 @@ namespace SocialMediaWebsite.BLL.Concrete
 				.Skip(pageIndex * pageSize)
 				.Take(pageSize)
 				.ToListAsync();
+		}
 
+		public async Task<List<Post>?> SkipAndTakeInteractedPosts(int pageIndex, int pageSize, int interactionType, string userId)
+		{
+			return await _posts.AsNoTracking()
+				.Include(p => p.MyUser)
+				.Include(p => p.Comments).ThenInclude(c => c.MyUser)
+				.Include(p => p.Tags)
+				.Include(p => p.Interactions)
+				.Where(p => p.Interactions.Any(i => i.InteractionTypeId == interactionType && i.MyUserId == userId))
+				.OrderByDescending(p => p.CreateDate)
+				.Skip(pageIndex * pageSize)
+				.Take(pageSize)
+				.ToListAsync();
 		}
 
 		public async Task<List<Post>?> SkipAndTakePostsWithTag(int pageIndex, int pageSize, int firstPostId, string tag)

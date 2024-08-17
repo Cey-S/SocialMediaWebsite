@@ -57,12 +57,18 @@
 						<p class="font-italic mb-1">Lives in New York</p>
 						<p class="font-italic mb-0">Photographer</p>
 					</div>
-				</div>
-				<div class="d-flex justify-content-between align-items-center mb-4 text-body">
-					<p class="lead fw-normal mb-0">Posts</p>
-					<!--Liked-->
-					<!--Shared-->
-				</div>
+				</div>				
+				<ul class="nav nav-justified feed-tabs mb-1 ms-auto me-auto" style="max-width: 880px;">
+					<li class="nav-item">
+						<a id="posts" class="nav-link selected-tab" href="#" onclick="ChangeTab(this);return false;">Posts</a>
+					</li>
+					<li class="nav-item">
+						<a id="liked" class="nav-link" href="#" onclick="ChangeTab(this);return false;">Liked</a>
+					</li>
+					<li class="nav-item">
+						<a id="reposted" class="nav-link" href="#" onclick="ChangeTab(this);return false;">Reposted</a>
+					</li>
+				</ul>
 				<!--Posts Container-->
 				<div id="container"></div>
 				<div id="progress" style="display:none">
@@ -83,24 +89,68 @@
 		let firstPostId = 0;
 		let isDataNull = false;
 
+		let currentTab = "posts";
+		let url = "/api/Feed/GetProfileData";
+
 		$(document).ready(function () {
-			GetProfileData();
+			SetPage();
+		});
+
+		function ChangeTab(element) {
+			let tab = $(element).attr("id");
+			if (currentTab === tab) {
+				return;
+			}
+
+			$("#" + currentTab).removeClass("selected-tab");
+			$("#" + tab).addClass("selected-tab");
+			currentTab = tab;
+
+			ClearContainer();
+
+			switch (tab) {
+				case "posts":
+					url = "/api/Feed/GetProfileData";
+					break;
+				case "liked":
+					url = "/api/Feed/GetProfileLikeData";
+					break;
+				case "reposted":
+					url = "/api/Feed/GetProfileRepostData";
+					break;
+				default:
+				// code block
+			}
+
+			SetPage();
+		}
+
+		function SetPage() {
+			GetData(url);
 
 			$(window).scroll(function () {
 				if (!isDataNull && $(window).scrollTop() ==
 					$(document).height() - $(window).height()) {
-					GetProfileData();
+					GetData(url);
 				}
 			});
-		});
+		}
 
-		function GetProfileData() {
+		function ClearContainer() {
+			$("#container").html("");
+			pageIndex = 0;
+			firstPostId = 0;
+			isDataNull = false;
+		}
+
+		function GetData(url) {
 			$.ajax({
 				type: 'GET',
-				url: '/api/Feed/GetProfileData',
+				url: url,
 				data: { "pageindex": pageIndex, "pagesize": pageSize, "firstpostid": firstPostId, "username": $("#username").html() },
 				dataType: 'json',
 				success: function (data) {
+					console.log(data);
 					if (data != null) {
 						RenderPostComponent(data);
 

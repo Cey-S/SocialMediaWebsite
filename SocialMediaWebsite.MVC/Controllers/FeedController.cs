@@ -69,11 +69,43 @@ namespace SocialMediaWebsite.MVC.Controllers
 			return Ok(json);
 		}
 
-		// User Profile Posts
+		// User Profile Posts: Posts, posts made by profile owner
 		[HttpGet]
 		public async Task<ActionResult> GetProfileData(int pageIndex, int pageSize, int firstPostId, string username)
 		{
 			var posts = await postManager.SkipAndTakeProfilePosts(pageIndex, pageSize, firstPostId, username);
+
+			if (posts == null || posts.Count == 0)
+			{
+				return Ok(null);
+			}
+
+			var json = await ConvertPostsToJsonAsync(posts);
+			return Ok(json);
+		}
+
+		// User Profile Posts: Liked, posts liked by profile owner
+		[HttpGet]
+		public async Task<ActionResult> GetProfileLikeData(int pageIndex, int pageSize, int firstPostId, string username)
+		{
+			var user = await userManager.FindByNameAsync(username);
+			var posts = await postManager.SkipAndTakeInteractedPosts(pageIndex, pageSize, 1, user.Id);
+
+			if (posts == null || posts.Count == 0)
+			{
+				return Ok(null);
+			}
+
+			var json = await ConvertPostsToJsonAsync(posts);
+			return Ok(json);
+		}
+
+		// User Profile Posts: Reposted, posts reposted by profile owner
+		[HttpGet]
+		public async Task<ActionResult> GetProfileRepostData(int pageIndex, int pageSize, int firstPostId, string username)
+		{
+			var user = await userManager.FindByNameAsync(username);
+			var posts = await postManager.SkipAndTakeInteractedPosts(pageIndex, pageSize, 2, user.Id);
 
 			if (posts == null || posts.Count == 0)
 			{

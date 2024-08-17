@@ -15,6 +15,7 @@ namespace SocialMediaWebsite.BLL.Abstract
 		Task<List<Post>?> SkipAndTakePopularPosts(int pageIndex, int pageSize);
 		Task<List<Post>?> SkipAndTakeFollowingPosts(int pageIndex, int pageSize, int firstPostId, string username);
 		Task<List<Post>?> SkipAndTakeProfilePosts(int pageIndex, int pageSize, int firstPostId, string username);
+		Task<List<Post>?> SkipAndTakeInteractedPosts(int pageIndex, int pageSize, int interactionType, string userId);
 		Task<List<Post>?> SkipAndTakePostsWithTag(int pageIndex, int pageSize, int firstPostId, string tag);
 	}
 }
