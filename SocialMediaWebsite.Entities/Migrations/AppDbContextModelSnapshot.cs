@@ -47,7 +47,7 @@ namespace SocialMediaWebsite.Entities.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e56af770-1048-4ee9-a195-15c5912c1be4",
+                            Id = "1",
                             Name = "AppUser",
                             NormalizedName = "APPUSER"
                         });
@@ -356,13 +356,13 @@ namespace SocialMediaWebsite.Entities.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2024, 8, 18, 11, 8, 23, 303, DateTimeKind.Utc).AddTicks(8284),
+                            CreateDate = new DateTime(2024, 8, 18, 14, 17, 59, 8, DateTimeKind.Utc).AddTicks(3754),
                             Name = "Like"
                         },
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2024, 8, 18, 11, 8, 23, 303, DateTimeKind.Utc).AddTicks(8286),
+                            CreateDate = new DateTime(2024, 8, 18, 14, 17, 59, 8, DateTimeKind.Utc).AddTicks(3756),
                             Name = "Share"
                         });
                 });

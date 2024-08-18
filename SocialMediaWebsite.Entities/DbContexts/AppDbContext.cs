@@ -41,7 +41,7 @@ namespace SocialMediaWebsite.Entities.DbContexts
 			base.OnModelCreating(modelBuilder);
 
 			//Seeding a 'AppUser' role to AspNetRoles table
-			modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "AppUser", NormalizedName = "APPUSER".ToUpper() });
+			modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Id = "1", Name = "AppUser", NormalizedName = "APPUSER".ToUpper() });
 
 			modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
