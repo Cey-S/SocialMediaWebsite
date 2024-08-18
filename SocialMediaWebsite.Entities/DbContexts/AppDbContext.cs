@@ -39,6 +39,10 @@ namespace SocialMediaWebsite.Entities.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 			base.OnModelCreating(modelBuilder);
+
+			//Seeding a 'AppUser' role to AspNetRoles table
+			modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "AppUser", NormalizedName = "APPUSER".ToUpper() });
+
 			modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }

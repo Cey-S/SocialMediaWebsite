@@ -61,18 +61,6 @@ namespace SocialMediaWebsite.MVC.Controllers
 				return View(vM);
 			}
 
-			// If role does not exists, then create role
-			if (!await roleManager.RoleExistsAsync("AppUser"))
-			{
-				var roleResult = await roleManager.CreateAsync(new IdentityRole() { Name = "AppUser" });
-				if (!roleResult.Succeeded)
-				{
-					// Could not create role
-					ModelState.AddModelError("UserCreate", $"Could not create user. {result.Errors.First().Description}");
-					return View(vM);
-				}
-			}
-
 			// Add user role
 			var userResult = await userManager.AddToRoleAsync(user, "AppUser");
 			if (!userResult.Succeeded)
