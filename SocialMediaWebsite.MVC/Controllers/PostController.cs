@@ -62,6 +62,9 @@ namespace SocialMediaWebsite.MVC.Controllers
 				return BadRequest();
 			}
 
+			user.PostCount--;
+			await userManager.UpdateAsync(user);
+
 			return RedirectToAction("Profile", "Account");
 		}
 
