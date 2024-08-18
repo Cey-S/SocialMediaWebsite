@@ -1,5 +1,5 @@
 ﻿@model MyUser
-<div id="username" class="d-none">@Model.UserName</div>
+<input id="username" type="hidden" value="@Model.UserName" />
 
 <div class="row d-flex justify-content-center">
 	<div class="col col-lg-9 col-xl-8">
@@ -11,6 +11,7 @@
 						 style="width: 150px; min-height: 150px; object-fit:cover; z-index: 1">
 					@if (ViewBag.isSignedInUser)
 					{
+						<input type="hidden" id="isSignedInUser" />
 						<a asp-action="Settings" type="button" class="btn btn-outline-dark" style="z-index: 1;">
 							Edit profile
 						</a>
@@ -18,13 +19,13 @@
 					else if (ViewBag.isFollowed)
 					{
 						<a asp-action="Unfollow" asp-route-username="@Model.UserName" type="button" class="btn btn-outline-dark" style="z-index: 1;">
-							Unfollow
+							Unfollow <i class="fa-solid fa-user-minus"></i>
 						</a>
 					}
 					else
 					{
 						<a asp-action="Follow" asp-route-username="@Model.UserName" type="button" class="btn btn-outline-dark" style="z-index: 1;">
-							Follow
+							Follow <i class="fa-solid fa-user-plus"></i>
 						</a>
 					}
 				</div>
@@ -57,25 +58,25 @@
 						<p class="font-italic mb-1">Lives in New York</p>
 						<p class="font-italic mb-0">Photographer</p>
 					</div>
-				</div>				
+				</div>
 				<ul class="nav nav-justified feed-tabs mb-1 ms-auto me-auto" style="max-width: 880px;">
 					<li class="nav-item">
 						<a id="posts" class="nav-link selected-tab" href="#" onclick="ChangeTab(this);return false;">Posts</a>
 					</li>
 					<li class="nav-item">
-						<a id="liked" class="nav-link" href="#" onclick="ChangeTab(this);return false;">Liked</a>
+						<a id="liked" class="nav-link" href="#" onclick="ChangeTab(this);return false;">Likes</a>
 					</li>
 					<li class="nav-item">
-						<a id="reposted" class="nav-link" href="#" onclick="ChangeTab(this);return false;">Reposted</a>
+						<a id="reposted" class="nav-link" href="#" onclick="ChangeTab(this);return false;">Reposts</a>
 					</li>
 				</ul>
 				<!--Posts Container-->
 				<div id="container"></div>
 				<div id="progress" style="display:none">
-					<h4>Loading...</h4>
+					<h4 class="text-center">Loading...</h4>
 				</div>
 				<div id="end" style="display:none">
-					<h4>There are no more posts...</h4>
+					<h4 class="text-center">There are no more posts...</h4>
 				</div>
 			</div>
 		</div>
@@ -147,10 +148,9 @@
 			$.ajax({
 				type: 'GET',
 				url: url,
-				data: { "pageindex": pageIndex, "pagesize": pageSize, "firstpostid": firstPostId, "username": $("#username").html() },
+				data: { "pageindex": pageIndex, "pagesize": pageSize, "firstpostid": firstPostId, "username": $("#username").val() },
 				dataType: 'json',
 				success: function (data) {
-					console.log(data);
 					if (data != null) {
 						RenderPostComponent(data);
 
@@ -161,7 +161,38 @@
 						pageIndex++;
 					} else {
 						isDataNull = true;
-						$("#end").show();
+						if (pageIndex === 0) {
+							$("#end").hide();
+							if ($("#isSignedInUser").length) {
+								switch (currentTab) {
+									case "posts":
+										$("#container").html('<h4 class="text-info mt-5 text-center">Create your first post to be displayed here!</h4>' +
+											'<div class="d-flex justify-content-center"><a class="btn btn-outline-info mt-3 p-2 ps-3 pe-3" href="/Post/Create">Create Post <i class="fa-solid fa-plus"></i></a></div>'
+										);
+										break;
+									case "liked":
+										$("#container").html('<h4 class="text-info mt-5 text-center">The posts that you liked will be here <i class="fa-solid fa-heart"></i></h4>');
+										break;
+									case "reposted":
+										$("#container").html('<h4 class="text-info mt-5 text-center">Your reposts will be here <i class="fa-solid fa-retweet"></i></h4>');
+										break;
+								}
+							} else {
+								switch (currentTab) {
+									case "posts":
+										$("#container").html('<h4 class="text-info mt-5 text-center">It looks like ' + $("#username").val() + ' hasn' + "'" + 't posted anything yet...</h4>');
+										break;
+									case "liked":
+										$("#container").html('<h4 class="text-info mt-5 text-center">It looks like ' + $("#username").val() + ' hasn' + "'" + 't liked <i class="fa-solid fa-heart"></i> anything yet...</h4>');
+										break;
+									case "reposted":
+										$("#container").html('<h4 class="text-info mt-5 text-center">It looks like ' + $("#username").val() + ' hasn' + "'" + 't reposted <i class="fa-solid fa-retweet"></i> anything yet...</h4>');
+										break;
+								}
+							}
+						} else {
+							$("#end").show();
+						}
 					}
 				},
 				beforeSend: function () {
