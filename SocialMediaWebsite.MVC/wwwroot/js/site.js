@@ -13,9 +13,12 @@ function RenderPostComponent(data) {
             '<div id="' + post.PostId + '" class="card text-break border-0 shadow mb-5 ms-auto me-auto" style="max-width: 880px;">' +
                 // Card Header: Profile Picture, Username
                 '<div class="card-header">' +
-                    '<div class="d-flex align-items-center">' +
-                        '<a href="/Account/Profile?username=' + post.Username + '" class="profile-link"><img src="' + post.ImagePath + '" class="profile-picture rounded-circle"/></a>' +
-                        '<a href="/Account/Profile?username=' + post.Username + '" class="profile-link"><h5 class="card-subtitle ms-2">' + post.Username + '</h5></a>' +
+                    '<div class="d-flex justify-content-between">' +
+                        '<div class="d-flex align-items-center">' +
+                            '<a href="/Account/Profile?username=' + post.Username + '" class="profile-link"><img src="' + post.ImagePath + '" class="profile-picture rounded-circle"/></a>' +
+                            '<a href="/Account/Profile?username=' + post.Username + '" class="profile-link"><h5 class="card-subtitle ms-2">' + post.Username + '</h5></a>' +
+                        '</div>' +
+                        '<div class="delete-btn"></div>' +
                     '</div>' +
                 '</div>' +
                 // Card Body: Title, Body, Tags
@@ -102,9 +105,9 @@ function RenderPostComponent(data) {
 
         // If the signed-in user reposted the post before
         if (post.isReposted) {
-            $("#" + post.PostId + "repostButton > a > svg").attr("fill", "#00BFFF");
+            $("#" + post.PostId + "repostButton > a > i").css("color", "#00BFFF");
         } else {
-            $("#" + post.PostId + "repostButton > a > svg").attr("fill", "black");
+            $("#" + post.PostId + "repostButton > a > i").css("color", "black");
         }
 
         // Add tags if any

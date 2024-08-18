@@ -52,6 +52,19 @@ namespace SocialMediaWebsite.MVC.Controllers
 			return View("TagSearch", name);
 		}
 
+		public async Task<IActionResult> Delete(int id)
+		{
+			var user = await userManager.FindByNameAsync(User.Identity.Name);
+			var result = await postManager.DeletePostAsync(id, user.Id);
+
+			if(result == 0)
+			{
+				return BadRequest();
+			}
+
+			return RedirectToAction("Profile", "Account");
+		}
+
 		[HttpGet]
 		public async Task<IActionResult> Create()
 		{

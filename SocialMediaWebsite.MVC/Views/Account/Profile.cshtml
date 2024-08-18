@@ -153,6 +153,19 @@
 				success: function (data) {
 					if (data != null) {
 						RenderPostComponent(data);
+						// Add post delete feature to user's own posts
+						if (currentTab === "posts") {
+							$.each(data, function (index, post) {
+								$("#" + post.PostId + " .card-header .delete-btn").html(
+									'<div class="dropdown align-self-end">' +
+										'<button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-ellipsis"></i></button>' +
+										'<ul class="dropdown-menu dropdown-menu-end">' +
+											'<li><a class="dropdown-item text-center text-danger" href="/Post/Delete?id=' + post.PostId + '">Delete <i class="fa-solid fa-trash"></i></a></li>' +
+										'</ul>' +
+									'</div>'
+								);
+							});
+						}
 
 						if (pageIndex == 0) {
 							firstPostId = $("#container div").first().attr("id");

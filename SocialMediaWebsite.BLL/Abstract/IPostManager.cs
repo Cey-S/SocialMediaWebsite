@@ -11,6 +11,7 @@ namespace SocialMediaWebsite.BLL.Abstract
 {
 	public interface IPostManager : IManager<AppDbContext, Post>
 	{
+		Task<int> DeletePostAsync(int postId, string userId);
 		Task<List<Post>?> SkipAndTakePosts(int pageIndex, int pageSize, int firstPostId);
 		Task<List<Post>?> SkipAndTakePopularPosts(int pageIndex, int pageSize);
 		Task<List<Post>?> SkipAndTakeFollowingPosts(int pageIndex, int pageSize, int firstPostId, string username);

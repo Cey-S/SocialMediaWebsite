@@ -20,6 +20,19 @@ namespace SocialMediaWebsite.BLL.Concrete
 			_posts = context.Set<Post>();
 		}
 
+		public async Task<int> DeletePostAsync(int postId, string userId)
+		{
+			var post = await _posts.AsNoTracking()
+						  .Where(p => p.MyUserId == userId && p.Id == postId)
+						  .FirstOrDefaultAsync();
+			if (post != null)
+			{
+				return await DeleteAsync(post);
+			}
+
+			return 0;
+		}
+
 		public async Task<List<Post>?> SkipAndTakePosts(int pageIndex, int pageSize, int firstPostId)
 		{
 			if (pageIndex == 0)
