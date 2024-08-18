@@ -154,7 +154,7 @@
 					if (data != null) {
 						RenderPostComponent(data);
 						// Add post delete feature to user's own posts
-						if (currentTab === "posts") {
+						if (currentTab === "posts" && $("#isSignedInUser").length) {
 							$.each(data, function (index, post) {
 								$("#" + post.PostId + " .card-header .delete-btn").html(
 									'<div class="dropdown align-self-end">' +
