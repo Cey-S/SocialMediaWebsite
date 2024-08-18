@@ -10,7 +10,7 @@ using SocialMediaWebsite.MVC.Models;
 namespace SocialMediaWebsite.MVC.Controllers
 {
 	[Authorize(Roles = "AppUser")]
-	public class AccountController(UserManager<MyUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<MyUser> signInManager, AppDbContext dbContext) : Controller
+	public class AccountController(UserManager<MyUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<MyUser> signInManager) : Controller
 	{
 		[AllowAnonymous]
 		public IActionResult Register()
@@ -249,9 +249,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 					return NotFound($"Unable to load user with username '{username}'.");
 				}
 
-				//var signedInUser = await userManager.GetUserAsync(User);
-				//AppDbContext dbContext = new AppDbContext();
-				var signedInUser = await dbContext.Users.Where(p => p.UserName == User.Identity.Name).Include(p => p.Followings).AsNoTracking().FirstOrDefaultAsync();
+				var signedInUser = await userManager.Users.Where(p => p.UserName == User.Identity.Name).Include(p => p.Followings).AsNoTracking().FirstOrDefaultAsync();
 
 				if (signedInUser == null)
 				{
@@ -266,7 +264,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 
 		public async Task<IActionResult> Follow(string username)
 		{
-			var user = await userManager.GetUserAsync(User);
+			var user = await userManager.Users.Where(p => p.UserName == User.Identity.Name).Include(p => p.Followings).FirstOrDefaultAsync();
 			if (user == null)
 			{
 				return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
@@ -276,6 +274,11 @@ namespace SocialMediaWebsite.MVC.Controllers
 			if (userToFollow == null)
 			{
 				return NotFound($"Unable to load user with username '{username}'.");
+			}
+
+			if (user.Followings.Any(p => p.Equals(userToFollow)))
+			{
+				return BadRequest();
 			}
 
 			user.Followings.Add(userToFollow);
@@ -298,7 +301,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 
 		public async Task<IActionResult> Unfollow(string username)
 		{
-			var user = await dbContext.Users.Where(p => p.UserName == User.Identity.Name).Include(p => p.Followings).FirstOrDefaultAsync();
+			var user = await userManager.Users.Where(p => p.UserName == User.Identity.Name).Include(p => p.Followings).FirstOrDefaultAsync();
 			if (user == null)
 			{
 				return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
@@ -308,6 +311,11 @@ namespace SocialMediaWebsite.MVC.Controllers
 			if (userToUnfollow == null)
 			{
 				return NotFound($"Unable to load user with username '{username}'.");
+			}
+
+			if (!user.Followings.Any(p => p.Equals(userToUnfollow)))
+			{
+				return BadRequest();
 			}
 
 			user.Followings.Remove(userToUnfollow);
@@ -334,7 +342,7 @@ namespace SocialMediaWebsite.MVC.Controllers
 			//var followers2 = await query2.FirstOrDefaultAsync();
 
 			// Select only the username and profile picture of the followers
-			var query = dbContext.Users
+			var query = userManager.Users
 				.AsNoTracking()
 				.Where(p => p.UserName == username)
 				.SelectMany(p => p.Followers,
@@ -350,9 +358,9 @@ namespace SocialMediaWebsite.MVC.Controllers
 		}
 
 		public async Task<IActionResult> Followings(string username)
-		{		
+		{
 			// Select only the username and profile picture of the followings
-			var query = dbContext.Users
+			var query = userManager.Users
 				.AsNoTracking()
 				.Where(p => p.UserName == username)
 				.SelectMany(p => p.Followings,
