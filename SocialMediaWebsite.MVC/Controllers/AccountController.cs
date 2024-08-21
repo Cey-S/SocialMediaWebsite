@@ -196,12 +196,21 @@ namespace SocialMediaWebsite.MVC.Controllers
 			if (vM.FormFile != null)
 			{
 				var extent = Path.GetExtension(vM.FormFile.FileName);
-				var newFileName = ($"profile_picture{extent}");
+				var newFileName = $"profile_picture_{DateTime.UtcNow:MMddyyHHmmss}{extent}";
 
 				var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\user-uploads", $"{user.Id}");
 				if (!Directory.Exists(folderPath))
 				{
 					Directory.CreateDirectory(folderPath);
+				}
+				else
+				{
+					// Clear folder before copying the new image there
+					DirectoryInfo folderInfo = new DirectoryInfo(folderPath);
+					foreach (FileInfo file in folderInfo.GetFiles())
+					{
+						file.Delete();
+					}
 				}
 
 				var imgPath = Path.Combine(folderPath, newFileName);
