@@ -29,6 +29,7 @@ Topics is a social media website where people can #tag their posts and gather ar
 ## 💻 Demo:
 ### ◼ Welcome Page
 A Bootstrap carousel welcomes the user on this page. The user can either log in or register. The login and register inputs are checked with jQuery validation.
+
 ![Topics_WelcomePage](https://github.com/user-attachments/assets/69f4a694-6292-41d9-98af-353aee0d6adc)
 
 ### ◼ Home Feed
@@ -38,28 +39,34 @@ The home feed consists of 3 tabs.
 - The Popular tab shows posts with the most interaction (likes, reposts, comments).
 
 **Infinite Scrolling** design pattern is used here, the page loads posts as the user scrolls down.
+
 ![HomeFeed](https://github.com/user-attachments/assets/5b28310c-2c36-4c35-a861-6f91f76100fc)
 
 ### ◼ Interactions
 The user can like, comment, and repost posts. Liked and reposted posts are displayed on the user's profile page.
+
 ![Interactions](https://github.com/user-attachments/assets/a17ae3d8-34d8-4a9d-8467-cc4d4cbadf34)
 
 ### ◼ Profile
 The user profile displays the posts, likes, and reposts made by that account, as well as the number of posts, followers, and people followed. Depending on the account, one of the "edit profile", "follow" or "unfollow" buttons will appear below the profile picture.
+
 ![UserProfile](https://github.com/user-attachments/assets/3a87d7d0-818d-4c54-abe3-057abe56d8c2)
 
 ### ◼ Follow/Unfollow
 Clicking on followers/following on user profile lists related accounts.
+
 ![Follow](https://github.com/user-attachments/assets/94bfe187-2f3c-4eb6-ad78-956a7d91eda7)
 
 ### ◼ Tag and Account Search
 The user can click on the tags or write the tag name on the search bar to find posts with that tag name. The user can also find accounts through the search bar.
+
 ![Search](https://github.com/user-attachments/assets/0d679ae9-3603-4109-b52b-99c822f23e53)
 
 ### ◼ Creating Posts
 The user can create posts via the "Create" button on the navigation bar, or the "Create Post" button on the right side column of the home feed (displayed only on large screens). If it is the first time posting, another create button is displayed on the user profile.
 
 To add tags to posts, click the add tag button, start typing your tag, and press enter. If you decide you no longer want that tag, select it and then click the trash can that appears.
+
 ![CreatingPosts](https://github.com/user-attachments/assets/7452e213-bc57-46b2-bb9c-e66ddd8b49e4)
 
 ### ◼ Deleting Posts
