@@ -193,9 +193,9 @@ function Repost(postId) {
         dataType: 'json',
         success: function (data) {
             if (data.isReposted) {
-                $("#" + data.id + "repostButton svg").attr("fill", "DeepSkyBlue");
+                $("#" + data.id + "repostButton a > i").css("color", "DeepSkyBlue");
             } else {
-                $("#" + data.id + "repostButton svg").attr("fill", "Black");
+                $("#" + data.id + "repostButton a > i").css("color", "Black");
             }
             $("#" + postId + "repostButton input").val(data.isReposted);
             $("#" + data.id + "repostButton span").html(data.newTotal);
